@@ -50,8 +50,8 @@ operator:
       enabled: true
 grafana:
   enabled: true
-  replicaCount: 3
-  resourcesPreset: xlarge
+  replicaCount: 1
+  resourcesPreset: small
   service:
     type: ClusterIP
   labels:

@@ -8,11 +8,11 @@ vmselect:
     search.maxConcurrentRequests: 50
     search.maxQueryLen: 128KiB
     vmalert.proxyURL: http://vmalert-server.victoria-metrics.svc.cluster.local:8880
-  replicaCount: 4
+  replicaCount: 1
   horizontalPodAutoscaler:
     enabled: true
-    maxReplicas: 8
-    minReplicas: 4
+    maxReplicas: 2
+    minReplicas: 1
     metrics:
       - resource:
           name: cpu
@@ -42,11 +42,11 @@ vminsert:
     loggerFormat: json
     httpListenAddr: :8480
     replicationFactor: 2
-  replicaCount: 4
+  replicaCount: 1
   horizontalPodAutoscaler:
     enabled: true
-    maxReplicas: 8
-    minReplicas: 4
+    maxReplicas: 2
+    minReplicas: 1
     metrics:
       - resource:
           name: cpu
@@ -77,8 +77,8 @@ vmstorage:
     httpListenAddr: :8482
   retentionPeriod: 182d
   persistentVolume:
-    size: 2Ti
-  replicaCount: 8
+    size: 50Gi
+  replicaCount: 1
   resources:
     requests:
       memory: 24Gi

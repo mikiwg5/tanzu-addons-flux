@@ -11,7 +11,7 @@ extraDeploy:
     name: ${tenant}-contour
     namespace: contour
   spec:
-    maxReplicas: 10
+    maxReplicas: 2
     metrics:
     - resource:
         name: memory
@@ -19,14 +19,14 @@ extraDeploy:
           averageUtilization: 100
           type: Utilization
       type: Resource
-    minReplicas: 2
+    minReplicas: 1
     scaleTargetRef:
       apiVersion: apps/v1
       kind: Deployment
       name: ${tenant}-contour
 contour:
   logFormat: json
-  replicaCount: 2
+  replicaCount: 1
   manageCRDs: true
   service:
     clusterIP: None

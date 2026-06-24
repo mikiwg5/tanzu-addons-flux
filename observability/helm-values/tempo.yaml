@@ -22,14 +22,14 @@ server:
   grpc_server_max_recv_msg_size: 16777216
   grpc_server_max_send_msg_size: 16777216
 ingester:
-  replicas: 5
+  replicas: 1
   autoscaling:
     enabled: true
-    minReplicas: 5
-    maxReplicas: 9
+    minReplicas: 1
+    maxReplicas: 2
   persistence:
     enabled: true
-    size: 300Gi
+    size: 10Gi
   config:
     complete_block_timeout: 1h
     flush_check_period: 30s
@@ -37,10 +37,10 @@ ingester:
 metricsGenerator:
   enabled: true
   kind: StatefulSet
-  replicas: 3
+  replicas: 1
   persistence:
     enabled: true
-    size: 200Gi
+    size: 10Gi
   config:
     processor:
       local_blocks:
@@ -72,24 +72,24 @@ metricsGenerator:
       # - url: http://mimir-gateway.mimir.svc.cluster.local/api/v1/push
       #   send_exemplars: true
 distributor:
-  replicas: 3
+  replicas: 1
   autoscaling:
     enabled: true
-    minReplicas: 3
-    maxReplicas: 6
+    minReplicas: 1
+    maxReplicas: 2
 compactor:
-  replicas: 5
+  replicas: 1
   config:
     compaction:
       block_retention: 168h
 querier:
-  replicas: 5
+  replicas: 1
   autoscaling:
     enabled: true
-    minReplicas: 5
-    maxReplicas: 9
+    minReplicas: 1
+    maxReplicas: 2
 queryFrontend:
-  replicas: 3
+  replicas: 1
   config:
     max_outstanding_per_tenant: 20000
     query_shards: 20
@@ -98,8 +98,8 @@ queryFrontend:
       query_backend_after: 24h
   autoscaling:
     enabled: true
-    minReplicas: 3
-    maxReplicas: 6
+    minReplicas: 1
+    maxReplicas: 2
 traces:
   otlp:
     http:
@@ -123,7 +123,7 @@ storage:
     empty_tenant_deletion_enabled: true
 memcached:
   enabled: true
-  replicas: 3
+  replicas: 1
   extraArgs:
   - --conn-limit=4096
   - --memory-limit=7168

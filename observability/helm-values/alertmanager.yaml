@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 1
 
 nameOverride: alertmanager
 
@@ -14,7 +14,7 @@ persistence:
   enabled: true
   accessModes:
     - ReadWriteOnce
-  size: 50Gi
+  size: 5Gi
 
 config:
   enabled: true

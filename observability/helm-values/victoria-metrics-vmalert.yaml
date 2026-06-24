@@ -1,7 +1,7 @@
 nameOverride: vmalert
 
 server:
-  replicaCount: 2
+  replicaCount: 1
   datasource:
     url: http://victoria-metrics-victoria-metrics-cluster-vmselect.victoria-metrics.svc.cluster.local:8481/select/0/prometheus
 

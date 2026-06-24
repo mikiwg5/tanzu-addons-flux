@@ -1,8 +1,8 @@
-replicas: 3
+replicas: 1
 autoscaling:
   enabled: true
-  minReplicas: 3
-  maxReplicas: 6
+  minReplicas: 1
+  maxReplicas: 2
 resources:
   requests:
     cpu: 64m

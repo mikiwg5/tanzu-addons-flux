@@ -1,7 +1,7 @@
 nameOverride: vmalert
 
 server:
-  replicaCount: 2
+  replicaCount: 1
   datasource:
     url: http://vma-victoria-metrics-auth.victoria-logs.svc.cluster.local:8427/
 

@@ -6,11 +6,11 @@ vlselect:
     http.shutdownDelay: 15s
     memory.allowedPercent: 80
     search.maxQueryDuration: 90s
-  replicaCount: 2
+  replicaCount: 1
   horizontalPodAutoscaler:
     enabled: true
-    maxReplicas: 4
-    minReplicas: 2
+    maxReplicas: 2
+    minReplicas: 1
     metrics:
     - resource:
         name: cpu
@@ -40,11 +40,11 @@ vlinsert:
     loggerFormat: json
     httpListenAddr: :9481
     http.shutdownDelay: 15s
-  replicaCount: 2
+  replicaCount: 1
   horizontalPodAutoscaler:
     enabled: true
-    maxReplicas: 4
-    minReplicas: 2
+    maxReplicas: 2
+    minReplicas: 1
     metrics:
     - resource:
         name: cpu
@@ -77,8 +77,8 @@ vlstorage:
     http.shutdownDelay: 15s
   persistentVolume:
     storageClassName: ""
-    size: 2Ti
-  replicaCount: 4
+    size: 20Gi
+  replicaCount: 1
   resources:
     requests:
       memory: 8Gi

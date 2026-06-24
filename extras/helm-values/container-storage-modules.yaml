@@ -5,7 +5,7 @@ csi-isilon:
   storageCapacity:
     enabled: true
   controller:
-    controllerCount: 2
+    controllerCount: 1
     volumeNamePrefix: csivol-${tenant}
     snapNamePrefix: csi-snap-${tenant}
     replication:

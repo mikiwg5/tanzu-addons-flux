@@ -55,7 +55,7 @@ alertmanager:
     digest: sha256:50bcca286519e8f96a3b57c7570762a08398c3ae5f57875dd15e0f3e118b9ed3
   persistence:
     enabled: true
-    size: 10Gi
+    size: 2Gi
 fullnameOverride: ${tenant}
 kubeApiServer:
   enabled: false
@@ -495,7 +495,7 @@ prometheus:
     datacenter: ${datacenter}
   persistence:
     enabled: true
-    size: 300Gi
+    size: 20Gi
   prometheusExternalLabelName: cluster
   resourcesPreset: none
 rbac:

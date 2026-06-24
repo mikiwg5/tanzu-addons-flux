@@ -1,4 +1,4 @@
-replicaCount: 3
+replicaCount: 1
 extraArgs:
   envflag.enable: true
   envflag.prefix: VM_
