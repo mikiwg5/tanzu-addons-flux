@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: victoria-logs-gateway
+  namespace: victoria-logs
+  labels:
+    app: victoria-logs-gateway
+spec:
+  selector:
+    matchLabels:
+      app: victoria-logs-gateway
+  serviceName: victoria-logs-gateway
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: victoria-logs-gateway
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: victoria-logs-gateway
+        image: ${registry_host}.safaricomet.net/platform/vlagent:v1.37.2
+        args:
+        - -remoteWrite.tmpDataPath=/data/tmp
+        - -httpListenAddr=:9429
+        - -remoteWrite.maxDiskUsagePerURL=45GiB,45GiB
+        - -remoteWrite.url=http://vlc1-victoria-logs-cluster-vlinsert.victoria-logs.svc.cluster.local:9481/internal/insert
+        - -remoteWrite.url=http://vlc2-victoria-logs-cluster-vlinsert.victoria-logs.svc.cluster.local:9481/internal/insert
+        ports:
+        - containerPort: 9429
+          name: http
+        volumeMounts:
+        - name: tmp-store
+          mountPath: /data/tmp
+        resources:
+          requests:
+            memory: 1800Mi
+            cpu: 750m
+          limits:
+            memory: 2560Mi
+            cpu: 1000m
+  volumeClaimTemplates:
+  - metadata:
+      name: tmp-store
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: victoria-logs-gateway
+  namespace: victoria-logs
+  labels:
+    app: victoria-logs-gateway
+spec:
+  selector:
+    app: victoria-logs-gateway
+  ports:
+  - protocol: TCP
+    port: 9429
+    targetPort: http
+    name: http
+  type: ClusterIP
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: victoria-logs-gateway
+  namespace: victoria-logs
+spec:
+  endpoints:
+  - port: http
+  selector:
+    matchLabels:
+      app: victoria-logs-gateway
+  namespaceSelector:
+    matchNames:
+    - victoria-logs

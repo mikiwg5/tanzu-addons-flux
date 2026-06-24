@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-prometheus
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    kyverno.io/exclude-rule: "true"
+spec: {}
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-prometheus
+  namespace: kube-prometheus
+spec:
+  interval: 1m
+  timeout: 20m
+  chart:
+    spec:
+      chart: kube-prometheus
+      version: 11.1.20
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  install:
+    crds: CreateReplace
+  releaseName: kube-prometheus
+  valuesFrom:
+  - kind: ConfigMap
+    name: kube-prometheus-values
+  postRenderers:
+  - kustomize:
+      images:
+      - name: docker.io/bitnami/alertmanager:0.28.1-debian-12-r9
+        newName: ${registry_host}.safaricomet.net/platform/kube-prometheus-images
+        digest: sha256:50bcca286519e8f96a3b57c7570762a08398c3ae5f57875dd15e0f3e118b9ed3
+      - name: docker.io/bitnami/blackbox-exporter:0.26.0-debian-12-r10
+        newName: ${registry_host}.safaricomet.net/platform/kube-prometheus-images
+        digest: sha256:33096ddabe7043b574aac673839d4d6116f67d5b9a9eacb18a9a4f813b32ab08
+      - name: docker.io/bitnami/kube-state-metrics:2.15.0-debian-12-r11
+        newName: ${registry_host}.safaricomet.net/platform/kube-prometheus-images
+        digest: sha256:d085c8ee753adfb3f4c6817e352899fe26dab6464bda13cc345bea60372d96a6
+      - name: docker.io/bitnami/node-exporter:1.9.1-debian-12-r4
+        newName: ${registry_host}.safaricomet.net/platform/kube-prometheus-images
+        digest: sha256:653097383091e922aea65277d4a3525d76e22c0124719902d7ee0e6f95c2f953
+      - name: docker.io/bitnami/prometheus-operator:0.83.0-debian-12-r2
+        newName: ${registry_host}.safaricomet.net/platform/kube-prometheus-images
+        digest: sha256:9b23077204b4c3240b9075875573bfbed1805261f3b6248d48d2a65160bc6e0b
+      - name: docker.io/bitnami/prometheus:3.4.1-debian-12-r1
+        newName: ${registry_host}.safaricomet.net/platform/kube-prometheus-images
+        digest: sha256:1c5d23f84cbc84b870e64bbfefb4bcf62a0a08fe94e1f78987261728f7efe7bb
+      - name: ubuntu:23.04
+        newName: ${registry_host}.safaricomet.net/platform/kube-prometheus-images
+        digest: sha256:ea1285dffce8a938ef356908d1be741da594310c8dced79b870d66808cb12b0f

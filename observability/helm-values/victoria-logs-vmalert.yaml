@@ -1,0 +1,53 @@
+nameOverride: vmalert
+
+server:
+  replicaCount: 2
+  datasource:
+    url: http://vma-victoria-metrics-auth.victoria-logs.svc.cluster.local:8427/
+
+  remote:
+    write:
+      url: http://victoria-metrics-victoria-metrics-cluster-vminsert.victoria-metrics.svc.cluster.local:8480/insert/0/prometheus
+    read:
+      url: http://victoria-metrics-victoria-metrics-cluster-vmselect.victoria-metrics.svc.cluster.local:8481/select/0/prometheus
+
+  notifier:
+    alertmanager:
+      url: http://alertmanager.alertmanager.svc.cluster.local:9093
+  notifiers: []
+
+  extraArgs:
+    envflag.enable: true
+    envflag.prefix: VM_
+    loggerFormat: json
+    httpListenAddr: :8880
+    rule:
+    - /config/alert-rules.yaml
+    external.url: https://${datacenter}-observe.safaricomet.net
+    external.alert.source: 'explore?left={"datasource":"victoria-logs","queries":[{"expr":{{ .Expr|jsonEscape|queryEscape }},"refId":"A"}],"range":{"from":"now-1h","to":"now"}}'
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+  config:
+    alerts:
+      groups:
+      - name: kubernetes-service-logs-recording-rules
+        type: vlogs
+        interval: 1m
+        rules:
+        - record: k8s_service_logs:rate1m
+          expr: |
+            k8s.cluster.name:!="" AND k8s.namespace.name:!="" AND service.name:!="" 
+            | rename k8s.cluster.name as k8s_cluster_name, k8s.namespace.name as k8s_namespace_name, service.name as service_name
+            | stats by (k8s_cluster_name,k8s_namespace_name,service_name) rate() log_lines_count
+
+serviceMonitor:
+  enabled: true
+
+extraObjects: []

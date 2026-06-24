@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- harbor.yaml
+
+configMapGenerator:
+- files:
+  - values.yaml=helm-values/harbor.yaml
+  name: harbor-values
+  namespace: goharbor
+  options:
+    disableNameSuffixHash: true

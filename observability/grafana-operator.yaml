@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: grafana-operator
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    kyverno.io/exclude-rule: "true"
+spec: {}
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana-operator
+  namespace: grafana-operator
+spec:
+  interval: 1m
+  timeout: 20m
+  chart:
+    spec:
+      chart: grafana-operator
+      version: 4.9.23
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  releaseName: grafana-operator
+  dependsOn:
+  - name: kyverno
+    namespace: kyverno
+  - name: adcs-issuer
+    namespace: cert-manager
+  - name: postgresql-ha
+    namespace: postgresql-ha
+  valuesFrom:
+  - kind: ConfigMap
+    name: grafana-operator-values
+  postRenderers:
+  - kustomize:
+      images:
+      - name: docker.io/bitnami/grafana-operator:5.18.0-debian-12-r5
+        newName: ${registry_host}.safaricomet.net/platform/grafana-operator-images
+        digest: sha256:7cdb67766a8bd554bf27bb10033e4eaa28f4ec9eb6d3ec0264fcee90cfa38345
+      - name: docker.io/bitnami/grafana:12.0.2-debian-12-r0
+        newName: ${registry_host}.safaricomet.net/platform/grafana-operator-images
+        digest: sha256:34d291799bd34a4176546774ccb43bbf508dc44afc333cdb0699cc0808192311

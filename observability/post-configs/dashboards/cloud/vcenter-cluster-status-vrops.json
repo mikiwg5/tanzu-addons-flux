@@ -1,0 +1,946 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 133,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#fffbfb",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "queryText": "resource(VMWARE:Datacenter).name(\"$${dc}\").whereProperties(summary|parentVcenter = \"$${vcenter}\").metrics(summary|total_number_clusters)",
+          "refId": "A"
+        }
+      ],
+      "title": "Cluster Count",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#fffbfb",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "queryText": "resource(VMWARE:Datacenter).name(\"$${dc}\").whereProperties(summary|parentVcenter = \"$${vcenter}\").metrics(summary|total_number_hosts)",
+          "refId": "A"
+        }
+      ],
+      "title": "Host Count",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#fffbfb",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "id": 3,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "queryText": "resource(VMWARE:Datacenter).name(\"$${dc}\").whereProperties(summary|parentVcenter = \"$${vcenter}\").metrics(summary|total_number_vms)",
+          "refId": "A"
+        }
+      ],
+      "title": "VM Count",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#fffbfb",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "queryText": "resource(VMWARE:Datacenter).name(\"$${dc}\").whereProperties(summary|parentVcenter = \"$${vcenter}\").metrics(summary|number_vm_templates)",
+          "refId": "A"
+        }
+      ],
+      "title": "VM Template Count",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#fffbfb",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 4
+      },
+      "id": 5,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "queryText": "resource(VMWARE:ClusterComputeResource).name(\"$${cluster}\").metrics(cpu|capacity_usagepct_average)",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Utilization",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#fffbfb",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 4
+      },
+      "id": 6,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "queryText": "resource(VMWARE:ClusterComputeResource).name(\"$${cluster}\").metrics(mem|usage_average)",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory Utilization",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#fffbfb",
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "#EAB839",
+                "value": 60
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 4
+      },
+      "id": 7,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "top",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "queryText": "resource(VMWARE:Datastore).\r\n    whereProperties(summary|parentDatacenter = \"$${dc}\" and summary|isLocal = \"false\" and summary|type = \"vsan\").\r\n    metrics(capacity|usedSpacePct)",
+          "refId": "A"
+        }
+      ],
+      "title": "Datastore Utilization",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 8,
+        "x": 0,
+        "y": 13
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "queryText": "resource(VMWARE:Datastore).\r\n    whereProperties(summary|parentVcenter = \"$${vcenter}\" and summary|parentDatacenter = \"$${dc}\" and summary|type = \"vsan\").\r\n    metrics(datastore|totalReadLatency_average)",
+          "refId": "A"
+        },
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "hide": false,
+          "queryText": "resource(VMWARE:Datastore).\r\n    whereProperties(summary|parentDatacenter = \"$${dc}\" and summary|type = \"vsan\").\r\n    metrics(datastore|totalWriteLatency_average)",
+          "refId": "B"
+        }
+      ],
+      "title": "vSAN Avg Latency",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "iops"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "datastore|numberWriteAveraged_average MDC2_CNF1_vSAN"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "dark-blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 8,
+        "x": 8,
+        "y": 13
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "queryText": "resource(VMWARE:Datastore).\r\n    whereProperties(summary|parentVcenter = \"$${vcenter}\" and summary|parentDatacenter = \"$${dc}\" and summary|type = \"vsan\").\r\n    metrics(datastore|numberReadAveraged_average)",
+          "refId": "A"
+        },
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "hide": false,
+          "queryText": "resource(VMWARE:Datastore).\r\n    whereProperties(summary|parentDatacenter = \"$${dc}\" and summary|type = \"vsan\").\r\n    metrics(datastore|numberWriteAveraged_average)",
+          "refId": "B"
+        }
+      ],
+      "title": "vSAN IOPS",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "KBs"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "datastore|write_average MDC2_CNF1_vSAN"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 8,
+        "x": 16,
+        "y": 13
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "queryText": "resource(VMWARE:Datastore).\r\n    whereProperties(summary|parentVcenter = \"$${vcenter}\" and summary|parentDatacenter = \"$${dc}\" and summary|type = \"vsan\").\r\n    metrics(datastore|read_average)",
+          "refId": "A"
+        },
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "hide": false,
+          "queryText": "resource(VMWARE:Datastore).\r\n    whereProperties(summary|parentDatacenter = \"$${dc}\" and summary|type = \"vsan\").\r\n    metrics(datastore|write_average)",
+          "refId": "B"
+        }
+      ],
+      "title": "vSAN Throughput",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "vmware-ariaoperations",
+          "value": "vmware-ariaoperations"
+        },
+        "includeAll": false,
+        "label": "Data Source",
+        "name": "datasource",
+        "options": [],
+        "query": "vmware-ariaoperations-datasource",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "text": "mdc1-wlg",
+          "value": "mdc1-wlg"
+        },
+        "datasource": {
+          "type": "vmware-ariaoperations-datasource",
+          "uid": "$${datasource}"
+        },
+        "definition": "resource(`VMWARE:VMwareAdapter Instance`).all()",
+        "label": "vCenter",
+        "name": "vcenter",
+        "options": [],
+        "query": {
+          "query": "resource(`VMWARE:VMwareAdapter Instance`).all()"
+        },
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "mdc1-wlg-dc",
+          "value": "mdc1-wlg-dc"
+        },
+        "datasource": {
+          "type": "vmware-ariaoperations-datasource",
+          "uid": "$${datasource}"
+        },
+        "definition": "resource(VMWARE:Datacenter).whereProperties(summary|parentVcenter = \"$${vcenter}\")",
+        "label": "DC",
+        "name": "dc",
+        "options": [],
+        "query": {
+          "query": "resource(VMWARE:Datacenter).whereProperties(summary|parentVcenter = \"$${vcenter}\")"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "mdc1-wlg-cl01",
+          "value": "mdc1-wlg-cl01"
+        },
+        "datasource": {
+          "type": "vmware-ariaoperations-datasource",
+          "uid": "$${datasource}"
+        },
+        "definition": "resource(VMWARE:ClusterComputeResource).\r\n    whereProperties(summary|parentDatacenter = \"$${dc}\" and summary|parentVcenter = \"$${vcenter}\")",
+        "label": "Cluster",
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "resource(VMWARE:ClusterComputeResource).\r\n    whereProperties(summary|parentDatacenter = \"$${dc}\" and summary|parentVcenter = \"$${vcenter}\")"
+        },
+        "refresh": 1,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "vCenter Cluster Status (vROps)",
+  "uid": null,
+  "version": 3
+}

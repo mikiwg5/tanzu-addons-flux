@@ -1,0 +1,26 @@
+postgresql:
+  replicaCount: 3
+  podAntiAffinityPreset: hard
+  resourcesPreset: "xlarge"
+  database: grafana
+  password: ${pg_password}
+  repmgrPassword: ${pg_repmgrPassword}
+  networkPolicy:
+    enabled: false
+pgpool:
+  replicaCount: 1
+  resourcesPreset: "xlarge"
+  adminPassword: ${pgpool_adminPassword}
+  networkPolicy:
+    enabled: false
+metrics:
+  enabled: true
+  resourcesPreset: "micro"
+  serviceMonitor:
+    enabled: true
+volumePermissions:
+  enabled: true
+  resourcesPreset: "micro"
+persistence:
+  enabled: true
+  size: 200Gi

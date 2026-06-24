@@ -1,0 +1,91 @@
+vlselect:
+  extraArgs:
+    envflag.enable: true
+    loggerFormat: json
+    httpListenAddr: :9471
+    http.shutdownDelay: 15s
+    memory.allowedPercent: 80
+    search.maxQueryDuration: 90s
+  replicaCount: 2
+  horizontalPodAutoscaler:
+    enabled: true
+    maxReplicas: 4
+    minReplicas: 2
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 90
+          type: Utilization
+      type: Resource
+    - resource:
+        name: memory
+        target:
+          averageUtilization: 90
+          type: Utilization
+      type: Resource
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 100m
+    limits:
+      memory: 8Gi
+      cpu: 500m
+  vmServiceScrape:
+    enabled: true
+    useServiceMonitor: true
+vlinsert:
+  extraArgs:
+    envflag.enable: true
+    loggerFormat: json
+    httpListenAddr: :9481
+    http.shutdownDelay: 15s
+  replicaCount: 2
+  horizontalPodAutoscaler:
+    enabled: true
+    maxReplicas: 4
+    minReplicas: 2
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 90
+          type: Utilization
+      type: Resource
+    - resource:
+        name: memory
+        target:
+          averageUtilization: 90
+          type: Utilization
+      type: Resource
+  resources:
+    requests:
+      memory: 2Gi
+      cpu: 1000m
+    limits:
+      memory: 4Gi
+      cpu: 2000m
+  vmServiceScrape:
+    enabled: true
+    useServiceMonitor: true
+vlstorage:
+  retentionPeriod: 15d
+  extraArgs:
+    envflag.enable: true
+    loggerFormat: json
+    httpListenAddr: :9491
+    http.shutdownDelay: 15s
+  persistentVolume:
+    storageClassName: ""
+    size: 2Ti
+  replicaCount: 4
+  resources:
+    requests:
+      memory: 8Gi
+      cpu: 2000m
+    limits:
+      memory: 12Gi
+      cpu: 4000m
+  vmServiceScrape:
+    enabled: true
+    useServiceMonitor: true

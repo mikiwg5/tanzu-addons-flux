@@ -1,0 +1,247 @@
+# apiVersion: grafana.integreatly.org/v1beta1
+# kind: GrafanaDatasource
+# metadata:
+#   name: mimir-ds
+#   namespace: grafana-operator
+# spec:
+#   datasource:
+#     access: proxy
+#     type: prometheus
+#     basicAuth: false
+#     isDefault: false
+#     editable: false
+#     jsonData:
+#       exemplarTraceIdDestinations:
+#       - datasourceUid: tempo
+#         name: traceID
+#       cacheLevel: Medium
+#       httpMethod: POST
+#       incrementalQuerying: false
+#       manageAlerts: true
+#       prometheusType: Mimir
+#       prometheusVersion: 2.9.1
+#       timeout: 300
+#     name: mimir
+#     uid: mimir
+#     url: http://mimir-gateway.mimir.svc.cluster.local/prometheus
+#   resyncPeriod: 1m
+#   instanceSelector:
+#     matchLabels:
+#       instance: grafana-one
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: victoria-metrics-ds
+  namespace: grafana-operator
+spec:
+  datasource:
+    access: proxy
+    type: prometheus
+    basicAuth: false
+    isDefault: false
+    editable: false
+    jsonData:
+      exemplarTraceIdDestinations:
+      - datasourceUid: tempo
+        name: traceID
+      cacheLevel: Medium
+      httpMethod: POST
+      incrementalQuerying: false
+      manageAlerts: true
+      timeout: 300
+    name: victoria-metrics
+    uid: victoria-metrics
+    url: http://victoria-metrics-victoria-metrics-cluster-vmselect.victoria-metrics.svc.cluster.local:8481/select/0/prometheus
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+---
+# apiVersion: grafana.integreatly.org/v1beta1
+# kind: GrafanaDatasource
+# metadata:
+#   name: loki-ds
+#   namespace: grafana-operator
+# spec:
+#   datasource:
+#     access: proxy
+#     type: loki
+#     basicAuth: false
+#     isDefault: false
+#     editable: false
+#     jsonData:
+#       derivedFields:
+#       - datasourceUid: tempo
+#         matcherRegex: '"trace_id":"([a-f0-9]{32})"'
+#         name: trace_id
+#         url: $${__value.raw}
+#         urlDisplayLabel: 'View Trace'
+#       manageAlerts: true
+#       timeout: 300
+#     name: loki
+#     uid: loki
+#     url: http://loki-gateway.loki.svc.cluster.local
+#   resyncPeriod: 1m
+#   instanceSelector:
+#     matchLabels:
+#       instance: grafana-one
+# ---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: victoria-logs-ds
+  namespace: grafana-operator
+spec:
+  datasource:
+    access: proxy
+    type: victoriametrics-logs-datasource
+    basicAuth: false
+    isDefault: false
+    editable: false
+    jsonData:
+      derivedFields:
+      - datasourceUid: tempo
+        matcherRegex: trace_id
+        matcherType: label
+        name: trace_id
+        url: $${__value.raw}
+        urlDisplayLabel: 'View Trace'
+      manageAlerts: true
+      timeout: 300
+    name: victoria-logs
+    uid: victoria-logs
+    url: http://vma-victoria-metrics-auth.victoria-logs.svc.cluster.local:8427/
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  plugins:
+  - name: victoriametrics-logs-datasource=https://storage.googleapis.com/grafana-plugins-catalog/victoriametrics-logs-datasource/release/0.23.2/victoriametrics-logs-datasource-0.23.2.zip
+    version: 0.23.2
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: tempo-ds
+  namespace: grafana-operator
+spec:
+  datasource:
+    access: proxy
+    type: tempo
+    basicAuth: false
+    isDefault: false
+    editable: false
+    jsonData:
+      serviceMap:
+        datasourceUid: victoria-metrics
+      nodeGraph:
+        enabled: true
+      streamingEnabled:
+        search: true
+      tracesToLogsV2:
+        customQuery: true
+        datasourceUid: victoria-logs
+        filterBySpanID: false
+        filterByTraceID: true
+        spanStartTimeShift: "-2m"
+        spanEndTimeShift: "2m"
+        tags:
+        - key: service.name
+          value: service_name
+        - key: k8s.cluster.name
+          value: k8s_cluster_name
+        - key: k8s.namespace.name
+          value: k8s_namespace_name
+      tracesToMetrics:
+        datasourceUid: victoria-metrics
+        spanStartTimeShift: "-2m"
+        spanEndTimeShift: "2m"
+        tags:
+        - key: service_name
+          value: service.name
+    name: tempo
+    uid: tempo
+    url: http://tempo-query-frontend.tempo.svc.cluster.local:3200
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  plugins:
+  - name: grafana-traces-app=https://storage.googleapis.com/integration-artifacts/grafana-exploretraces-app/grafana-exploretraces-app-1.1.1.zip
+    version: 1.1.1
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: alertmanager-ds
+  namespace: grafana-operator
+spec:
+  datasource:
+    access: proxy
+    type: alertmanager
+    basicAuth: false
+    isDefault: false
+    editable: false
+    jsonData:
+      handleGrafanaManagedAlerts: true
+      implementation: "prometheus"
+    name: alertmanager
+    uid: alertmanager
+    url: http://alertmanager.alertmanager.svc.cluster.local:9093
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: vmware-ariaoperations-datasource
+  namespace: grafana-operator
+spec:
+  datasource:
+    access: proxy
+    type: vmware-ariaoperations-datasource
+    basicAuth: false
+    isDefault: false
+    editable: true
+    jsonData:
+      host: mdc1-itm-xvrops01.safaricomet.net
+      tlsSkipVerify: true
+      username: admin
+    name: vmware-ariaoperations
+    uid: vmware-ariaoperations
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  plugins:
+  - name: vmware-ariaoperations-datasource=https://github.com/prydin/aria-operations-plug-in-for-grafana/releases/download/1.2.1/vmware-ariaoperations-datasource-1.2.1.zip
+    version: 1.2.1
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: tcp-ariaops
+  namespace: grafana-operator
+spec:
+  datasource:
+    access: proxy
+    type: vmware-ariaoperations-datasource
+    basicAuth: false
+    isDefault: false
+    editable: true
+    jsonData:
+      host: mdc1-tcp-vrops.safaricomet.net
+      tlsSkipVerify: true
+      username: admin
+    name: TCP-AriaOps
+    uid: TCP-AriaOps
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  plugins:
+  - name: vmware-ariaoperations-datasource=https://github.com/prydin/aria-operations-plug-in-for-grafana/releases/download/1.2.1/vmware-ariaoperations-datasource-1.2.1.zip
+    version: 1.2.1

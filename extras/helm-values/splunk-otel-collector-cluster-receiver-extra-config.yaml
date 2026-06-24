@@ -1,0 +1,12 @@
+exporters:
+  debug/extra:
+    verbosity: detailed
+
+extensions:
+  bearertokenauth:
+    filename: /secrets/bearertokens/tokens
+
+service:
+  extensions:
+  - bearertokenauth
+  - health_check

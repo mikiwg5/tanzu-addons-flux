@@ -1,0 +1,23 @@
+csi-isilon:
+  enabled: true
+  logLevel: "info"
+  fsGroupPolicy: File
+  storageCapacity:
+    enabled: true
+  controller:
+    controllerCount: 2
+    volumeNamePrefix: csivol-${tenant}
+    snapNamePrefix: csi-snap-${tenant}
+    replication:
+      enabled: true
+    snapshot:
+      enabled: true
+    resizer:
+      enabled: true
+    healthMonitor:
+      enabled: true
+  node:
+    healthMonitor:
+      enabled: true
+csm-replication:
+  enabled: true

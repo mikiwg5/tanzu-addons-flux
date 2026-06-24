@@ -1,0 +1,34 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vma
+  namespace: victoria-logs
+spec:
+  interval: 1m
+  timeout: 40m
+  chart:
+    spec:
+      chart: victoria-metrics-auth
+      version: 0.19.5
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  releaseName: vma
+  dependsOn:
+  - name: kyverno
+    namespace: kyverno
+  - name: kube-prometheus
+    namespace: kube-prometheus
+  - name: vlc2
+    namespace: victoria-logs
+  valuesFrom:
+  - kind: ConfigMap
+    name: victoria-metrics-auth-values
+  postRenderers:
+  - kustomize:
+      images:
+      - name: victoriametrics/vmauth:v1.126.0
+        newName: ${registry_host}.safaricomet.net/platform/victoria-metrics-auth-images
+        digest: sha256:9e72a798bd00fe4b3ada83ffef10e0dfde73c2fd5249cd742b831a492718c79b

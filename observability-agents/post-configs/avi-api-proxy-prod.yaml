@@ -1,0 +1,93 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: avi-api-proxy-prod-config
+  namespace: otel-gateway
+spec:
+  refreshPolicy: OnChange
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: external-secrets-cluster-secret-store
+  target:
+    name: avi-api-proxy-prod-config
+    creationPolicy: Owner
+  data:
+  - secretKey: controller
+    remoteRef:
+      key: k8s/${datacenter}-cloud/prod-avi
+      property: controller
+  - secretKey: username
+    remoteRef:
+      key: k8s/${datacenter}-cloud/prod-avi
+      property: username
+  - secretKey: password
+    remoteRef:
+      key: k8s/${datacenter}-cloud/prod-avi
+      property: password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avi-api-proxy-prod
+  namespace: otel-gateway
+  labels:
+    app: avi-api-proxy
+spec:
+  selector:
+    matchLabels:
+      app: avi-api-proxy
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: avi-api-proxy
+    spec:
+      containers:
+      - name: avi-api-proxy
+        image: ${registry_host}.safaricomet.net/platform/avi-api-proxy:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: AVI_CONTROLLER
+          valueFrom:
+            secretKeyRef:
+              name: avi-api-proxy-prod-config
+              key: controller
+        - name: AVI_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: avi-api-proxy-prod-config
+              key: username
+        - name: AVI_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: avi-api-proxy-prod-config
+              key: password
+        ports:
+        - containerPort: 8080
+          name: avi-api-proxy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: avi-api-proxy-prod
+  namespace: otel-gateway
+  labels:
+    app: avi-api-proxy
+spec:
+  selector:
+    app: avi-api-proxy
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP
+---
+
+

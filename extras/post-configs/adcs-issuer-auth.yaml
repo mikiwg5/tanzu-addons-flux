@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: adcs-issuer-secret
+  namespace: cert-manager
+data:
+  password: aTRrckEwczQ3eWsk
+  username: c3ZjLXRhbnp1LWFkY3MtZW5yb2xsQHNhZmFyaWNvbWV0Lm5ldA==
+type: Opaque

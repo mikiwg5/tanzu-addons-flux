@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: alertmanager
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    kyverno.io/exclude-rule: "true"
+spec: {}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: alertmanager-webhook-token
+  namespace: alertmanager
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: external-secrets-cluster-secret-store
+  target:
+    name: eda-webhook-token
+    creationPolicy: Owner
+  data:
+    - secretKey: webhook-token
+      remoteRef:
+        key: k8s-common/cloud/monitoring/alertmanager
+        property: webhook-token
+    - secretKey: webhook-url
+      remoteRef:
+        key: k8s-common/cloud/monitoring/alertmanager
+        property: webhook-url
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: alertmanager
+  namespace: alertmanager
+spec:
+  interval: 1m
+  timeout: 40m
+  chart:
+    spec:
+      chart: alertmanager
+      version: 1.27.1
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  releaseName: alertmanager
+  dependsOn:
+    - name: kyverno
+      namespace: kyverno
+  valuesFrom:
+    - kind: ConfigMap
+      name: alertmanager-values
+  postRenderers:
+    - kustomize:
+        images:
+          - name: quay.io/prometheus-operator/prometheus-config-reloader:v0.86.1
+            newName: ${registry_host}.safaricomet.net/platform/alertmanager-images
+            digest: sha256:d163d8eeab29cdc2e60e60510b19c328d49f090dc7adc27cb89289748c3b6a1e
+          - name: quay.io/prometheus/alertmanager:v0.28.1
+            newName: ${registry_host}.safaricomet.net/platform/alertmanager-images
+            digest: sha256:220da6995a919b9ee6e0d3da7ca5f09802f3088007af56be22160314d2485b54

@@ -1,0 +1,339 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- grafana-ds.yaml
+- grafana-k8s-dashboards.yaml
+- grafana-infra-dashboards.yaml
+- grafana-cloud-dashboards.yaml
+- grafana-meta-monitor-dashboards.yaml
+- grafana-app-dashboards.yaml
+- grafana-noc-dashboards.yaml
+- grafana-monthly-report-dashboards.yaml
+configMapGenerator:
+- files:
+  - json=./dashboards/k8s/high-level-cluster-stats.json
+  name: high-level-cluster-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/contour-ingress.json
+  name: contour-ingress-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/core-dns.json
+  name: core-dns-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/envoy-proxy.json
+  name: envoy-proxy-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/etcd-cluster-overview.json
+  name: etcd-cluster-overview-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/flux-cluster-stats.json
+  name: flux-cluster-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/flux2.json
+  name: flux2-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/k8s-api-server.json
+  name: k8s-api-server-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/k8s-cluster-statistics.json
+  name: k8s-cluster-statistics-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/node-pod-stats.json
+  name: node-pod-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/node-details.json
+  name: node-details-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/pod-details.json
+  name: pod-details-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/pvc-stats.json
+  name: pvc-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/infra/physical-server-stats.json
+  name: physical-server-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/infra/physical-server-details.json
+  name: physical-server-details-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/infra/powermax.json
+  name: powermax-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/infra/powerscale-cluster-overview.json
+  name: powerscale-cluster-overview-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/infra/powerscale-node-summary.json
+  name: powerscale-node-summary-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/infra/powerscale-protocol-detail.json
+  name: powerscale-protocol-detail-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/avi-controller.json
+  name: avi-controller-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/avi-pool.json
+  name: avi-pool-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/avi-service-engine.json
+  name: avi-service-engine-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/avi-virtual-service.json
+  name: avi-virtual-service-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/nomad-cluster-overview.json
+  name: nomad-cluster-overview-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/vcenter-cluster-status-vrops.json
+  name: vcenter-cluster-status-vrops-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/vcenter-cluster-status.json
+  name: vcenter-cluster-status-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/vcenter-host-stats.json
+  name: vcenter-host-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/vcenter-vm-stats.json
+  name: vcenter-vm-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/vm-details.json
+  name: vm-details-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/vm-details-windows.json
+  name: vm-details-windows-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/ssl-certificate-probe.json
+  name: ssl-certificate-probe-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/http-endpoint-status.json
+  name: http-endpoint-status-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/meta-monitor/victorialogs-cluster.json
+  name: victorialogs-cluster-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/meta-monitor/victorialogs-vlagent.json
+  name: victorialogs-vlagent-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/meta-monitor/victoriametrics-cluster.json
+  name: victoriametrics-cluster-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/meta-monitor/victoriametrics-vmagent.json
+  name: victoriametrics-vmagent-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/meta-monitor/victoriametrics-vmalert.json
+  name: victoriametrics-vmalert-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/meta-monitor/victoriametrics-vmauth.json
+  name: victoriametrics-vmauth-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/app/service-stats.json
+  name: service-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+#noc
+- files:
+  - json=./dashboards/noc/high-level-cluster-stats.json
+  name: noc-high-level-cluster-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/noc/node-pod-stats.json
+  name: noc-node-pod-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/noc/node-details.json
+  name: noc-node-details-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/noc/pod-details.json
+  name: noc-pod-details-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/noc/pvc-stats.json
+  name: noc-pvc-stats-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/noc/vm-details.json
+  name: noc-vm-details-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/noc/vm-details-windows.json
+  name: noc-vm-details-windows-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/noc/vmstat-dashboard.json
+  name: noc-vmstat-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/noc/vmstat-windows-dashboard.json
+  name: noc-vmstat-windows-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+
+- files:
+  - json=./dashboards/monthly-report/storage-and-compute.json
+  name: storage-and-compute-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/mysql-status.json
+  name: mysql-status-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true 
+- files:
+  - json=./dashboards/cloud/vcenter-server-appliance-fs-usage.json
+  name: vcenter-server-appliance-fs-usage-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/noc/high-level-vm-resource-usage.json
+  name: noc-high-level-vm-resource-usage-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/k8s/k8s-node-status.json
+  name: k8s-node-status-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+- files:
+  - json=./dashboards/cloud/iis.json
+  name: iis-dashboard
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true
+  

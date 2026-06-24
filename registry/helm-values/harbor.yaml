@@ -1,0 +1,57 @@
+externalURL: https://${datacenter}-sfcr.dev3.safaricomet.net
+expose:
+  type: ingress
+  tls:
+    enabled: true
+    certSource: secret
+    secret:
+      secretName: ${datacenter}-sfcr.dev3.safaricomet.net
+  ingress:
+    hosts:
+      core: ${datacenter}-sfcr.dev3.safaricomet.net
+    className: contour
+    annotations:
+      ingress.kubernetes.io/force-ssl-redirect: "true"
+      cert-manager.io/issuer: "adcsclusterissuer"
+      cert-manager.io/issuer-kind: "ClusterAdcsIssuer"
+      cert-manager.io/issuer-group: "adcs.certmanager.csf.nokia.com"
+      cert-manager.io/common-name: ${datacenter}-sfcr.dev3.safaricomet.net
+persistence:
+  enabled: true
+  persistentVolumeClaim:
+    registry:
+      size: 2Ti
+    jobservice:
+      jobLog:
+        size: 10Gi
+    database:
+      size: 50Gi
+    redis:
+      size: 10Gi
+    trivy:
+      size: 10Gi
+logLevel: info
+cache:
+  enabled: true
+  expireHours: 24
+core:
+  secret: ${core_secret}
+  xsrfKey: ${core_xsrfkey}
+jobservice:
+  secret: ${jobservice_secret}
+  maxJobWorkers: 500
+registry:
+  credentials:
+    username: ${registry_cred_username}
+    password: ${registry_cred_password}
+  secret: ${registry_secret}
+trivy:
+  enabled: true
+database:
+  type: internal
+  internal:
+    password: ${db_internal_password}
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true

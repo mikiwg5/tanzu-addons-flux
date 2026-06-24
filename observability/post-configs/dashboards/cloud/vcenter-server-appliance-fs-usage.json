@@ -1,0 +1,3085 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 253,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 5,
+      "panels": [],
+      "title": "MDC1-IT-Cloud-vCenter  Server File System Utilization %",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/dblog|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/dblog"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/log|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/log"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/archive|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/archive"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/boot|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/boot"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/lifecycle|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/lifecycle"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/vtsdb|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/vstdb"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/db|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/db"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/netdump|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/netdump"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/imagebuilder|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/imagebuilder"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/vtsdblog|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/vtsdblog"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/autodeploy|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/autodeploy"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/boot/efi|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/boot/efi"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/core|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/core"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/lvm_snapshot|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/lvm_snapshot"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/seat|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/seat"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/updatemgr|percentage mdc1-itm-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/updatemgr"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 11,
+      "maxPerRow": 3,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "hide": true,
+          "queryText": "resource(VMWARE:VirtualMachine).name(\"$virtualmachine\").whereProperties(summary|parentVcenter = \"${vcenterserver}\").metrics(guestfilesystem|percentage)",
+          "refId": "A"
+        },
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "hide": false,
+          "queryText": "resource(VMWARE:VirtualMachine).name(\"mdc1-itm-vc01\").whereProperties(summary|parentVcenter = \"mdc1-itm\").metrics(guestfilesystem|percentage)",
+          "refId": "B"
+        }
+      ],
+      "title": "MDC1-ITM-VC01",
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "Time",
+                "guestfilesystem:/storage/dblog|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/log|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/archive|percentage mdc1-itm-vc01",
+                "guestfilesystem:/boot|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/lifecycle|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/vtsdb|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/db|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/netdump|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/imagebuilder|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/vtsdblog|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/autodeploy|percentage mdc1-itm-vc01",
+                "guestfilesystem:/boot/efi|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/core|percentage mdc1-itm-vc01",
+                "guestfilesystem:/|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/lvm_snapshot|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/seat|percentage mdc1-itm-vc01",
+                "guestfilesystem:/storage/updatemgr|percentage mdc1-itm-vc01"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/dblog|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/dblog"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/log|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/log"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/archive|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/archive"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/boot|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/boot"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/lifecycle|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/lifecycle"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/vtsdb|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/vtsdb"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/db|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/db"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/netdump|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/netdump"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/imagebuilder|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/imagebuilder"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/vtsdblog|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/vtsdblog"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/autodeploy|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/autodeploy"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/boot/efi|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/boot/efi"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/core|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/core"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/lvm_snapshot|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/lvm_snapshot"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/seat|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/seat"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/updatemgr|percentage mdc1-wlg-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/updatemgr"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 3,
+      "maxPerRow": 3,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "hide": true,
+          "queryText": "resource(VMWARE:VirtualMachine).name(\"$virtualmachine\").whereProperties(summary|parentVcenter = \"${vcenterserver}\").metrics(guestfilesystem|percentage)",
+          "refId": "A"
+        },
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "hide": false,
+          "queryText": "resource(VMWARE:VirtualMachine).name(\"mdc1-wlg-vc01\").whereProperties(summary|parentVcenter = \"mdc1-itm\").metrics(guestfilesystem|percentage)",
+          "refId": "B"
+        }
+      ],
+      "title": "MDC1-WLG-VC01",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "vmware-ariaoperations-datasource",
+        "uid": "$${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/dblog|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/dblog"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/log|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/log"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/archive|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/archive"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/boot|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/boot"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/lifecycle|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/lifecycle"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/vtsdb|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/vtsdb"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/db|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/db"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/netdump|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/netdump"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/imagebuilder|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/imagebuilder"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/vtsdblog|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/vtsdblog"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/autodeploy|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/autodeploy"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/boot/efi|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/boot/efi"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/core|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/core"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/lvm_snapshot|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/lvm_snapshot"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/seat|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/seat"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "guestfilesystem:/storage/updatemgr|percentage mdc1-wlt-vc01"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "/storage/updatemgr"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 4,
+      "maxPerRow": 3,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "12.0.2",
+      "targets": [
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "hide": true,
+          "queryText": "resource(VMWARE:VirtualMachine).name(\"$virtualmachine\").whereProperties(summary|parentVcenter = \"${vcenterserver}\").metrics(guestfilesystem|percentage)",
+          "refId": "A"
+        },
+        {
+          "advancedMode": true,
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "hide": false,
+          "queryText": "resource(VMWARE:VirtualMachine).name(\"mdc1-wlt-vc01\").whereProperties(summary|parentVcenter = \"mdc1-itm\").metrics(guestfilesystem|percentage)",
+          "refId": "B"
+        }
+      ],
+      "title": "MDC1-WLT-VC01",
+      "type": "bargauge"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 6,
+      "panels": [
+        {
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/dblog|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/dblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/log|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/log"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/archive|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/archive"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lifecycle|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lifecycle"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdb|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vstdb"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/db|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/db"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/netdump|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/netdump"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/imagebuilder|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/imagebuilder"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdblog|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vtsdblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/autodeploy|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/autodeploy"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot/efi|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot/efi"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/core|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/core"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lvm_snapshot|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lvm_snapshot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/seat|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/seat"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/updatemgr|percentage mdc2-itm-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/updatemgr"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 328
+          },
+          "id": 9,
+          "maxPerRow": 3,
+          "options": {
+            "displayMode": "gradient",
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "sizing": "auto",
+            "valueMode": "color"
+          },
+          "pluginVersion": "12.0.2",
+          "targets": [
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": true,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"$virtualmachine\").whereProperties(summary|parentVcenter = \"${vcenterserver}\").metrics(guestfilesystem|percentage)",
+              "refId": "A"
+            },
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": false,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"mdc2-itm-vc01\").whereProperties(summary|parentVcenter = \"mdc2-itm\").metrics(guestfilesystem|percentage)",
+              "refId": "B"
+            }
+          ],
+          "title": "MDC2-ITM-VC01",
+          "transformations": [
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "include": {
+                  "names": [
+                    "Time",
+                    "guestfilesystem:/storage/dblog|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/log|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/archive|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/boot|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/lifecycle|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/vtsdb|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/db|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/netdump|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/imagebuilder|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/vtsdblog|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/autodeploy|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/boot/efi|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/core|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/lvm_snapshot|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/seat|percentage mdc2-itm-vc01",
+                    "guestfilesystem:/storage/updatemgr|percentage mdc2-itm-vc01"
+                  ]
+                }
+              }
+            }
+          ],
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/dblog|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/dblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/log|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/log"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/archive|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/archive"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lifecycle|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lifecycle"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdb|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vstdb"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/db|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/db"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/netdump|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/netdump"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/imagebuilder|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/imagebuilder"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdblog|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vtsdblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/autodeploy|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/autodeploy"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot/efi|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot/efi"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/core|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/core"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lvm_snapshot|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lvm_snapshot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/seat|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/seat"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/updatemgr|percentage mdc2-wlg-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/updatemgr"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 464
+          },
+          "id": 8,
+          "maxPerRow": 3,
+          "options": {
+            "displayMode": "gradient",
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "sizing": "auto",
+            "valueMode": "color"
+          },
+          "pluginVersion": "12.0.2",
+          "targets": [
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": true,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"$virtualmachine\").whereProperties(summary|parentVcenter = \"${vcenterserver}\").metrics(guestfilesystem|percentage)",
+              "refId": "A"
+            },
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": false,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"mdc2-wlg-vc01\").whereProperties(summary|parentVcenter = \"mdc2-itm\").metrics(guestfilesystem|percentage)",
+              "refId": "B"
+            }
+          ],
+          "title": "MDC2-WLG-VC01",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/dblog|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/dblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/log|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/log"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/archive|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/archive"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lifecycle|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lifecycle"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdb|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vstdb"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/db|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/db"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/netdump|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/netdump"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/imagebuilder|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/imagebuilder"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdblog|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vtsdblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/autodeploy|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/autodeploy"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot/efi|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot/efi"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/core|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/core"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lvm_snapshot|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lvm_snapshot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/seat|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/seat"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/updatemgr|percentage mdc2-wlt-vc01"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/updatemgr"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 472
+          },
+          "id": 2,
+          "maxPerRow": 3,
+          "options": {
+            "displayMode": "gradient",
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "sizing": "auto",
+            "valueMode": "color"
+          },
+          "pluginVersion": "12.0.2",
+          "targets": [
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": true,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"$virtualmachine\").whereProperties(summary|parentVcenter = \"${vcenterserver}\").metrics(guestfilesystem|percentage)",
+              "refId": "A"
+            },
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": false,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"mdc2-wlt-vc01\").whereProperties(summary|parentVcenter = \"mdc2-itm\").metrics(guestfilesystem|percentage)",
+              "refId": "B"
+            }
+          ],
+          "title": "MDC2-WLT-VC01",
+          "type": "bargauge"
+        }
+      ],
+      "title": "MDC2-IT-Cloud-vCenter  Server File System Utilization %",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 26
+      },
+      "id": 13,
+      "panels": [
+        {
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/dblog|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/dblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/log|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/log"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/archive|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/archive"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lifecycle|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lifecycle"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdb|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vstdb"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/db|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/db"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/netdump|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/netdump"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/imagebuilder|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/imagebuilder"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdblog|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vtsdblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/autodeploy|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/autodeploy"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot/efi|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot/efi"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/core|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/core"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lvm_snapshot|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lvm_snapshot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/seat|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/seat"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/updatemgr|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/updatemgr"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 43
+          },
+          "id": 14,
+          "options": {
+            "displayMode": "gradient",
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "sizing": "auto",
+            "valueMode": "color"
+          },
+          "pluginVersion": "12.0.2",
+          "targets": [
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": false,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"mdc1-tcpm-vc01\").whereProperties(summary|parentVcenter = \"mdc1-tcpm-vc01.safaricomet.net\").metrics(guestfilesystem|percentage)",
+              "refId": "B"
+            }
+          ],
+          "title": "MDC1-TCPM-VC01",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/dblog|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/dblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/log|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/log"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/archive|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/archive"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lifecycle|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lifecycle"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdb|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vstdb"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/db|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/db"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/netdump|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/netdump"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/imagebuilder|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/imagebuilder"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdblog|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vtsdblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/autodeploy|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/autodeploy"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot/efi|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot/efi"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/core|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/core"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lvm_snapshot|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lvm_snapshot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/seat|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/seat"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/updatemgr|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/updatemgr"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 66
+          },
+          "id": 15,
+          "options": {
+            "displayMode": "gradient",
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "sizing": "auto",
+            "valueMode": "color"
+          },
+          "pluginVersion": "12.0.2",
+          "targets": [
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": false,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"mdc1-tcpc-vc01\").whereProperties(summary|parentVcenter = \"mdc1-tcpm-vc01.safaricomet.net\").metrics(guestfilesystem|percentage)",
+              "refId": "B"
+            }
+          ],
+          "title": "MDC1-TCPC-VC01",
+          "type": "bargauge"
+        }
+      ],
+      "title": "MDC1-TCP vCenter Server File System Utilization %",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 27
+      },
+      "id": 10,
+      "panels": [
+        {
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/dblog|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/dblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/log|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/log"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/archive|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/archive"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lifecycle|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lifecycle"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdb|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vstdb"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/db|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/db"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/netdump|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/netdump"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/imagebuilder|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/imagebuilder"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdblog|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vtsdblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/autodeploy|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/autodeploy"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot/efi|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot/efi"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/core|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/core"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lvm_snapshot|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lvm_snapshot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/seat|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/seat"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/updatemgr|percentage mdc2-tcpm-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/updatemgr"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 44
+          },
+          "id": 7,
+          "maxPerRow": 3,
+          "options": {
+            "displayMode": "gradient",
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "sizing": "auto",
+            "valueMode": "color"
+          },
+          "pluginVersion": "12.0.2",
+          "targets": [
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": true,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"$virtualmachine\").whereProperties(summary|parentVcenter = \"${vcenterserver}\").metrics(guestfilesystem|percentage)",
+              "refId": "A"
+            },
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": false,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"mdc2-tcpm-vc01.safaricomet.net\").whereProperties(summary|parentVcenter = \"mdc2-tcpm-vc01.safaricomet.net\").metrics(guestfilesystem|percentage)",
+              "refId": "B"
+            }
+          ],
+          "title": "MDC2-TCPM-VC01",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "vmware-ariaoperations-datasource",
+            "uid": "$${datasource}"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "#EAB839",
+                    "value": 80
+                  },
+                  {
+                    "color": "red",
+                    "value": 90
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/dblog|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/dblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/log|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/log"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/archive|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/archive"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lifecycle|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lifecycle"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdb|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vstdb"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/db|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/db"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/netdump|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/netdump"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/imagebuilder|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/imagebuilder"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/vtsdblog|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/vtsdblog"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/autodeploy|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/autodeploy"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/boot/efi|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/boot/efi"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/core|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/core"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/lvm_snapshot|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/lvm_snapshot"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/seat|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/seat"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "guestfilesystem:/storage/updatemgr|percentage mdc2-tcpc-vc01.safaricomet.net"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "/storage/updatemgr"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 52
+          },
+          "id": 12,
+          "maxPerRow": 3,
+          "options": {
+            "displayMode": "gradient",
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "sizing": "auto",
+            "valueMode": "color"
+          },
+          "pluginVersion": "12.0.2",
+          "targets": [
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": true,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"$virtualmachine\").whereProperties(summary|parentVcenter = \"${vcenterserver}\").metrics(guestfilesystem|percentage)",
+              "refId": "A"
+            },
+            {
+              "advancedMode": true,
+              "datasource": {
+                "type": "vmware-ariaoperations-datasource",
+                "uid": "$${datasource}"
+              },
+              "hide": false,
+              "queryText": "resource(VMWARE:VirtualMachine).name(\"mdc2-tcpc-vc01.safaricomet.net\").whereProperties(summary|parentVcenter = \"mdc2-tcpm-vc01.safaricomet.net\").metrics(guestfilesystem|percentage)",
+              "refId": "B"
+            }
+          ],
+          "title": "MDC2-TCPC-VC01",
+          "type": "bargauge"
+        }
+      ],
+      "title": "MDC2-TCP vCenter  Server File System Utilization %",
+      "type": "row"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 41,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "vmware-ariaoperations",
+          "value": "vmware-ariaoperations"
+        },
+        "label": "Data Source",
+        "name": "datasource",
+        "options": [],
+        "query": "vmware-ariaoperations-datasource",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Vcenter  Server Appliance  utilization",
+  "uid": null,
+  "version": 45
+}

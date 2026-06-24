@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: postgresql-ha
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    kyverno.io/exclude-rule: "true"
+spec: {}
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: postgresql-ha
+  namespace: postgresql-ha
+spec:
+  interval: 1m
+  timeout: 40m
+  chart:
+    spec:
+      chart: postgresql-ha
+      version: 14.3.6
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  releaseName: postgresql-ha
+  dependsOn:
+  - name: kyverno
+    namespace: kyverno
+  - name: kube-prometheus
+    namespace: kube-prometheus
+  valuesFrom:
+  - kind: ConfigMap
+    name: postgresql-ha-values
+  postRenderers:
+  - kustomize:
+      images:
+      - name: docker.io/bitnami/os-shell:12-debian-12-r31
+        newName: ${registry_host}.safaricomet.net/platform/postgresql-ha-images
+        digest: sha256:d7f10fce8a7cd60d33f6f5a6b2ec52e87221d45d99eef4f0400cb1bbbdc1d027
+      - name: docker.io/bitnami/pgpool:4.5.4-debian-12-r2
+        newName: ${registry_host}.safaricomet.net/platform/postgresql-ha-images
+        digest: sha256:bbc6fec4e7e96c3a957890ba91d0a25bb7220f3a648c8132bfad131344c3100f
+      - name: docker.io/bitnami/postgres-exporter:0.15.0-debian-12-r44
+        newName: ${registry_host}.safaricomet.net/platform/postgresql-ha-images
+        digest: sha256:2a64cead50effd06a857d6118a4ef7c03dfed625b5b0a669d3c8286405e29f0b
+      - name: docker.io/bitnami/postgresql-repmgr:16.4.0-debian-12-r27
+        newName: ${registry_host}.safaricomet.net/platform/postgresql-ha-images
+        digest: sha256:79d2359d8b775886c2ce0c5e080b741ab0be1c5d9afe100105fe6d25e609ffe8

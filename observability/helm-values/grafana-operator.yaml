@@ -1,0 +1,116 @@
+extraDeploy:
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: ldap-config
+  data:
+    ldap.toml: |
+      verbose_logging = true
+      [[servers]]
+      host = "safaricomet.net"
+      port = 636
+      use_ssl = true
+      start_tls = false
+      ssl_skip_verify = true
+      bind_dn = "${ldap_user}"
+      bind_password = "${ldap_password}"
+      search_filter = "(sAMAccountName=%s)"
+      search_base_dns = ["DC=safaricomet,DC=net"]
+      [servers.attributes]
+      name = "givenName"
+      surname = "sn"
+      username = "sAMAccountName"
+      member_of = "memberOf"
+      email =  "mail"
+      [[servers.group_mappings]]
+      group_dn = "CN=tanzustepadmins,OU=Safaricomet Security Groups,OU=Domain Users,DC=safaricomet,DC=net"
+      org_role = "Admin"
+      grafana_admin = true
+      [[servers.group_mappings]]
+      group_dn = "CN=GrafanaAdmins,OU=Safaricomet Security Groups,OU=Domain Users,DC=safaricomet,DC=net"
+      org_role = "Admin"
+      grafana_admin = true
+      [[servers.group_mappings]]
+      group_dn = "cn=users,dc=grafana,dc=org"
+      org_role = "Editor"
+      [[servers.group_mappings]]
+      group_dn = "CN=GrafanaUsers,OU=Safaricomet Security Groups,OU=Domain Users,DC=safaricomet,DC=net"
+      org_role = "Viewer"
+      
+
+global:
+  security:
+    allowInsecureImages: true
+operator:
+  enabled: true
+  replicaCount: 1
+  resourcesPreset: small
+  prometheus:
+    serviceMonitor:
+      enabled: true
+grafana:
+  enabled: true
+  replicaCount: 3
+  resourcesPreset: xlarge
+  service:
+    type: ClusterIP
+  labels:
+    instance: grafana-one
+  config:
+    feature_toggles:
+      externalServiceAccounts: "true"
+      traceQLStreaming: "true"
+    plugins:
+      allow_loading_unsigned_plugins: vmware-ariaoperations-datasource
+    database:
+      type: "postgres"
+      host: "postgresql-ha-pgpool.postgresql-ha.svc:5432"
+      name: "grafana"
+      user: ${pg_user}
+      password: ${pg_password}
+    auth:
+      disable_login_form: "false"
+    auth.ldap:
+      enabled: "true"
+      config_file: /etc/grafana-configmaps/ldap.toml
+    smtp:
+      enabled: "true"
+      host: 10.3.124.25:25
+      user: observe-grafana@safaricom.et
+      skip_verify: "true"
+  ingress:
+    enabled: true
+    ingressClassName: contour
+    host: ${datacenter}-observe.safaricomet.net
+    annotations:
+      projectcontour.io/response-timeout: 180s
+      cert-manager.io/common-name: "${datacenter}-observe.safaricomet.net"
+      cert-manager.io/issuer: "adcsclusterissuer"
+      cert-manager.io/issuer-kind: "ClusterAdcsIssuer"
+      cert-manager.io/issuer-group: "adcs.certmanager.csf.nokia.com"
+      projectcontour.io/websocket-routes: /
+    tls: true
+    tlsSecret: grafana-tls
+  persistence:
+    enabled: false
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  extraVolumeMounts:
+  - name: ca-cert
+    mountPath: /etc/ssl/certs/
+  - mountPath: /etc/grafana-configmaps
+    name: grafana-configmaps
+    readOnly: false
+  extraVolumes:
+  - name: ca-cert
+    configMap:
+      name: safaricomet.net
+      items:
+      - key: ca-certificates.crt
+        path: ca-certificates.crt
+  - name: grafana-configmaps
+    configMap:
+      name: ldap-config

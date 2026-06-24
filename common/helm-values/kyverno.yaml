@@ -1,0 +1,99 @@
+admissionController:
+  replicas: 3
+  rbac:
+    clusterRole:
+      extraResources:
+      - apiGroups:
+        - ''
+        resources:
+        - secrets
+        verbs:
+        - list
+        - get
+  container:
+    resources:
+      limits:
+        memory: 1024Mi
+  serviceMonitor:
+    enabled: true
+backgroundController:
+  rbac:
+    clusterRole:
+      extraResources:
+      - apiGroups:
+        - ''
+        resources:
+        - secrets
+        verbs:
+        - get
+        - create
+        - update
+        - delete
+  resources:
+    limits:
+      memory: 512Mi
+  serviceMonitor:
+    enabled: true
+cleanupController:
+  resources:
+    limits:
+      memory: 512Mi
+  serviceMonitor:
+    enabled: true
+webhooksCleanup:
+  image:
+    registry: ${registry_host}.safaricomet.net
+    repository: platform/kubectl
+    tag: '1.30.2'
+policyReportsCleanup:
+  image:
+    registry: ${registry_host}.safaricomet.net
+    repository: platform/kubectl
+    tag: '1.30.2'
+reportsController:
+  resources:
+    limits:
+      memory: 512Mi
+  serviceMonitor:
+    enabled: true
+config:
+  webhooks:
+    objectSelector:
+      matchExpressions:
+      - key: webhooks.kyverno.io/exclude
+        operator: DoesNotExist
+  resourceFiltersIncludeNamespaces:
+  - cert-manager
+  - contour
+  - infra
+  - kube-prometheus
+  - vmware-system-auth
+  - vmware-system-cloud-provider
+  - vmware-system-csi
+  - secretgen-controller
+  - tkg-system
+  - vmware-system-antrea
+  - vmware-system-tkg
+  - default
+  - splunk
+  - isilon
+  - powerprotect
+  - velero-ppdm
+  - velero-vsphere-plugin-backupdriver
+  - goharbor
+  - flux-system
+  - hamle
+  - postgresql-ha
+  - grafana-operator
+  - tempo
+  - otel-gateway
+  - demo
+  - reloader
+  - external-secrets
+  - falcon-system
+  - falcon-kac
+  - beyla
+  - victoria-metrics
+  - victoria-logs
+test:
+  sleep: 90

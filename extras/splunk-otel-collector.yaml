@@ -1,0 +1,202 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: splunk
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    kyverno.io/exclude-rule: "true"
+spec: {}
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: bearertokens
+  namespace: splunk
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: external-secrets-cluster-secret-store
+  target:
+    name: bearertokens
+    creationPolicy: Owner
+  data:
+  - secretKey: tokens
+    remoteRef:
+      key: k8s-common/cloud/monitoring/bearertokens
+      property: tokens
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: splunk-otel-collector
+  namespace: splunk
+spec:
+  interval: 1m
+  timeout: 40m
+  chart:
+    spec:
+      chart: splunk-otel-collector
+      version: 0.138.1
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  releaseName: splunk-otel-collector
+  dependsOn:
+  - name: cert-manager
+    namespace: cert-manager
+  valuesFrom:
+  - kind: ConfigMap
+    name: splunk-values
+  postRenderers:
+  - kustomize:
+      patches:
+      - target:
+          group: rbac.authorization.k8s.io
+          version: v1
+          kind: ClusterRole
+          name: splunk-otel-collector-ta-clusterRole
+        patch: |-
+          - op: add
+            path: /rules/0/resources/-
+            value: probes
+          - op: add
+            path: /rules/0/resources/-
+            value: scrapeconfigs
+      - target:
+          group: apps
+          version: v1
+          kind: DaemonSet
+          name: splunk-otel-collector-agent
+        patch: |-
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --config=/extra/config.yaml
+          - op: add
+            path: /spec/template/spec/shareProcessNamespace
+            value: true
+          - op: add
+            path: /spec/template/spec/containers/-
+            value:
+              name: configmap-reloader
+              image: ${registry_host}.safaricomet.net/platform/configmap-reload:v0.16.0
+              args:
+                - --volume-dir=/extra/
+                - --target-process-name=otelcol
+              volumeMounts:
+              - name: extra-config
+                mountPath: /extra
+                readOnly: true
+              securityContext:
+                runAsUser: 0
+                runAsGroup: 0
+                capabilities:
+                  add: ["SYS_PTRACE"]
+          - op: add
+            path: /spec/template/spec/initContainers
+            value: []
+          - op: add
+            path: /spec/template/spec/initContainers/-
+            value:
+              name: init-iptables
+              image: ${registry_host}.safaricomet.net/platform/ubuntu:24.04
+              command:
+              - /bin/bash
+              - -c
+              - |
+                #!/bin/bash
+                # Define an array of ports to check and add rules for
+                ports=(4317 4318)
+                for port in "$${ports[@]}"; do
+                  if ! chroot /host iptables -C INPUT -p tcp --dport "$$port" -j ACCEPT &> /dev/null; then
+                    echo "Rule for port $$port does not exist, adding it..."
+                    chroot /host iptables -A INPUT -p tcp --dport "$$port" -j ACCEPT
+                  else
+                    echo "Rule for port $$port already exists, skipping..."
+                  fi
+                done
+                # List the final rules in the INPUT chain
+                chroot /host iptables -S INPUT
+              securityContext:
+                privileged: true
+              volumeMounts:
+              - mountPath: /host
+                name: host-root
+      - target:
+          group: apps
+          version: v1
+          kind: Deployment
+          name: splunk-otel-collector-k8s-cluster-receiver
+        patch: |-
+          - op: add
+            path: /spec/template/spec/containers/0/args/-
+            value: --config=/extra/config.yaml
+          - op: add
+            path: /spec/template/spec/shareProcessNamespace
+            value: true
+          - op: add
+            path: /spec/template/spec/containers/-
+            value:
+              name: configmap-reloader
+              image: ${registry_host}.safaricomet.net/platform/configmap-reload:v0.16.0
+              args:
+                - --volume-dir=/extra/
+                - --target-process-name=otelcol
+              volumeMounts:
+              - name: extra-config
+                mountPath: /extra
+                readOnly: true
+              securityContext:
+                runAsUser: 0
+                runAsGroup: 0
+                capabilities:
+                  add: ["SYS_PTRACE"]
+      - target:
+          group: opentelemetry.io
+          version: v1alpha1
+          kind: Instrumentation
+          name: splunk-otel-collector
+        patch: |-
+          - op: replace
+            path: /spec/apacheHttpd/image
+            value: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images@sha256:f0eaaf30ca1ae394ab094f40b02c9bf35b48a760745c72a5699cce116fdaeb0f
+          - op: replace
+            path: /spec/dotnet/image
+            value: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images@sha256:ed0b34c31269fb10c30ffa8e8f362ee3321a89573fc31a34a20363aa9d8ac523
+          - op: replace
+            path: /spec/nginx/image
+            value: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images@sha256:f0eaaf30ca1ae394ab094f40b02c9bf35b48a760745c72a5699cce116fdaeb0f
+          - op: replace
+            path: /spec/java/image
+            value: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images@sha256:05d538de3f760e205cf2080f60a617f9c5824cef6edc9b204d75047065888ea3
+          - op: replace
+            path: /spec/go/image
+            value: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images@sha256:e1d18ea0ed2b569dcb1f389829628dbbd94fe3b385a117b1392ecb7be9d38cc3
+          - op: replace
+            path: /spec/nodejs/image
+            value: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images@sha256:d332cac00fd3db1bafd9440aff8f7a668a724e8bdc70c44e617fad554fe62576
+          - op: replace
+            path: /spec/python/image
+            value: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images@sha256:d488c507e0cacc64b81423b96f6e53b30f2602a0e4bcc614658182f6aa13d5b4
+      images:
+      - name: busybox:latest
+        newName: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images
+        digest: sha256:870e815c3a50dd0f6b40efddb319c72c32c3ee340b5a3e8945904232ccd12f44
+      - name: ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.134.0
+        newName: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images
+        digest: sha256:8737d1ad4672e19b52baef59a229be77c23d32522f802466430ce9500ef0e430
+      - name: ghcr.io/open-telemetry/opentelemetry-operator/target-allocator:v0.132.0
+        newName: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images
+        digest: sha256:0f7fd5c59e12e225d2c8882e996d2a3e661dab632b0be0ac1d6504b47265443c
+      - name: quay.io/brancz/kube-rbac-proxy:v0.19.1
+        newName: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images
+        digest: sha256:ea7bdc09a4929c8cad2b84b06ea4455721e75d4b86aa3dddf41f29b4817db358
+      - name: quay.io/signalfx/splunk-otel-collector:0.138.0
+        newName: ${registry_host}.safaricomet.net/platform/splunk-otel-collector-images
+        digest: sha256:88092004aad540b2e49dfd3083843b7da20ae08878762d05516f7dda7f1ea34e

@@ -1,0 +1,133 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: infra
+  namespace: grafana-operator
+spec:
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  resyncPeriod: 1m
+  title: Infra
+  uid: infra
+  permissions: |
+    {
+      "items": [
+        {
+          "role": "Admin",
+          "permission": 4
+        },
+        {
+          "role": "Editor",
+          "permission": 2
+        }
+      ]
+    }
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: physical-server-stats
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: infra
+  uid: physical-server-stats
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: physical-server-stats-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: physical-server-details
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: infra
+  uid: physical-server-details
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: physical-server-details-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: powermax
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: infra
+  uid: powermax
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: powermax-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: powerscale-cluster-overview
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: infra
+  uid: powerscale-cluster-overview
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: powerscale-cluster-overview-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: powerscale-node-summary
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: infra
+  uid: powerscale-node-summary
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: powerscale-node-summary-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: powerscale-protocol-detail
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: infra
+  uid: powerscale-protocol-detail
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: powerscale-protocol-detail-dashboard
+    key: json

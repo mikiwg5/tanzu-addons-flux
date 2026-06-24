@@ -1,0 +1,18 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: bearertokens
+  namespace: otel-gateway
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: external-secrets-cluster-secret-store
+  target:
+    name: bearertokens
+    creationPolicy: Owner
+  data:
+  - secretKey: tokens
+    remoteRef:
+      key: k8s-common/cloud/monitoring/bearertokens
+      property: tokens

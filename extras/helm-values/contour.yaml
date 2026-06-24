@@ -1,0 +1,65 @@
+configInline:
+  accesslog-format: json
+  disablePermitInsecure: true
+  tls:
+    fallback-certificate: {}
+fullnameOverride: ${tenant}
+extraDeploy:
+- apiVersion: autoscaling/v2
+  kind: HorizontalPodAutoscaler
+  metadata:
+    name: ${tenant}-contour
+    namespace: contour
+  spec:
+    maxReplicas: 10
+    metrics:
+    - resource:
+        name: memory
+        target:
+          averageUtilization: 100
+          type: Utilization
+      type: Resource
+    minReplicas: 2
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: ${tenant}-contour
+contour:
+  logFormat: json
+  replicaCount: 2
+  manageCRDs: true
+  service:
+    clusterIP: None
+  resources:
+    limits:
+      cpu: 500m
+      memory: 8Gi
+    requests:
+      cpu: 250m
+      memory: 1Gi
+envoy:
+  resources:
+    limits:
+      cpu: 150m
+      memory: 1.5Gi
+    requests:
+      cpu: 100m
+      memory: 512Mi
+  shutdownManager:
+    resources:
+      limits:
+        cpu: 150m
+        memory: 192Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+gatewayAPI:
+  manageCRDs: true
+useCertManager: true
+metrics:
+  prometheusRule:
+    enabled: true
+  serviceMonitor:
+    enabled: true
+    interval: 60s
+    scrapeTimeout: 15s

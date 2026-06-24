@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- adcs-issuer-auth.yaml
+- adcs-issuer-config.yaml
+- isilon-sc.yaml
+- isilon-vsclass.yaml
+- infra-custom-cluster-roles.yaml

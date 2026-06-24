@@ -1,0 +1,43 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: apps
+  namespace: grafana-operator
+spec:
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  resyncPeriod: 1m
+  title: Apps
+  uid: apps
+  permissions: |
+    {
+      "items": [
+        {
+          "role": "Admin",
+          "permission": 4
+        },
+        {
+          "role": "Editor",
+          "permission": 2
+        }
+      ]
+    }
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: service-stats
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: apps
+  uid: service-stats
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: service-stats-dashboard
+    key: json

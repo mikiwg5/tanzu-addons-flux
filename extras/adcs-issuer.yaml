@@ -1,0 +1,53 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: adcs-issuer-serving-cert
+  namespace: cert-manager
+spec:
+  commonName: adcs-issuer-webhook-service.cert-manager.svc
+  dnsNames:
+  - adcs-issuer-webhook-service.cert-manager.svc.cluster.local
+  issuerRef:
+    kind: ClusterIssuer
+    name: selfsigned
+  secretName: webhook-server-cert
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: adcs-issuer
+  namespace: cert-manager
+spec:
+  interval: 1m
+  timeout: 20m
+  chart:
+    spec:
+      chart: adcs-issuer
+      version: 3.0.0
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  releaseName: adcs-issuer
+  dependsOn:
+  - name: trust-manager
+    namespace: cert-manager
+  valuesFrom:
+  - kind: ConfigMap
+    name: adcs-issuer-values
+  postRenderers:
+  - kustomize:
+      images:
+      - name: djkormo/adcs-issuer:2.1.2
+        newName: ${registry_host}.safaricomet.net/platform/adcs-issuer-images
+        digest: sha256:9f34e87e7586a10fef8580f9ff96a3f5cc4cd58e6546eef11fc3df619c504c7c
+      patches:
+      - target:
+          kind: Deployment
+          name: adcs-issuer-controller-manager
+        patch: |
+          - op: remove
+            path: /spec/selector/matchLabels/app.kubernetes.io~1instance
+          - op: remove
+            path: /spec/selector/matchLabels/app.kubernetes.io~1name

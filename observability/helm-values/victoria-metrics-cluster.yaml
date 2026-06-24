@@ -1,0 +1,90 @@
+vmselect:
+  extraArgs:
+    envflag.enable: true
+    envflag.prefix: VM_
+    loggerFormat: json
+    httpListenAddr: :8481
+    dedup.minScrapeInterval: 10ms
+    search.maxConcurrentRequests: 50
+    search.maxQueryLen: 128KiB
+    vmalert.proxyURL: http://vmalert-server.victoria-metrics.svc.cluster.local:8880
+  replicaCount: 4
+  horizontalPodAutoscaler:
+    enabled: true
+    maxReplicas: 8
+    minReplicas: 4
+    metrics:
+      - resource:
+          name: cpu
+          target:
+            averageUtilization: 90
+            type: Utilization
+        type: Resource
+      - resource:
+          name: memory
+          target:
+            averageUtilization: 90
+            type: Utilization
+        type: Resource
+  resources:
+    requests:
+      memory: 2Gi
+      cpu: 500m
+    limits:
+      memory: 4Gi
+      cpu: 1000m
+  serviceMonitor:
+    enabled: true
+vminsert:
+  extraArgs:
+    envflag.enable: true
+    envflag.prefix: VM_
+    loggerFormat: json
+    httpListenAddr: :8480
+    replicationFactor: 2
+  replicaCount: 4
+  horizontalPodAutoscaler:
+    enabled: true
+    maxReplicas: 8
+    minReplicas: 4
+    metrics:
+      - resource:
+          name: cpu
+          target:
+            averageUtilization: 90
+            type: Utilization
+        type: Resource
+      - resource:
+          name: memory
+          target:
+            averageUtilization: 90
+            type: Utilization
+        type: Resource
+  resources:
+    requests:
+      memory: 2Gi
+      cpu: 500m
+    limits:
+      memory: 4Gi
+      cpu: 1000m
+  serviceMonitor:
+    enabled: true
+vmstorage:
+  extraArgs:
+    envflag.enable: true
+    envflag.prefix: VM_
+    loggerFormat: json
+    httpListenAddr: :8482
+  retentionPeriod: 182d
+  persistentVolume:
+    size: 2Ti
+  replicaCount: 8
+  resources:
+    requests:
+      memory: 24Gi
+      cpu: 2000m
+    limits:
+      memory: 28Gi
+      cpu: 4000m
+  serviceMonitor:
+    enabled: true

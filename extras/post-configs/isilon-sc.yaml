@@ -1,0 +1,15 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: isilon
+provisioner: csi-isilon.dellemc.com
+parameters:
+  AccessZone: CSI
+  AzServiceIP: ${datacenter}-psc-csi.safaricomet.net
+  ClusterName: ${datacenter}-psc-cl
+  IsiPath: /ifs/CSI
+  RootClientEnabled: "true"
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
+mountOptions: [ "rsize=1048576", "wsize=1048576" ]

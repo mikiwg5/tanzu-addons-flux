@@ -1,0 +1,75 @@
+replicaCount: 2
+
+nameOverride: alertmanager
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+persistence:
+  enabled: true
+  accessModes:
+    - ReadWriteOnce
+  size: 50Gi
+
+config:
+  enabled: true
+  global: {}
+
+  templates:
+    - "/etc/alertmanager/*.tmpl"
+
+  receivers:
+    - name: platform-team-receiver
+      webhook_configs:
+        - url_file: /etc/alertmanager/eda-webhook/webhook-url
+          send_resolved: true
+          http_config:
+            authorization:
+              type: Bearer
+              credentials_file: /etc/alertmanager/eda-webhook/webhook-token
+            tls_config:
+              insecure_skip_verify: true
+    - name: default-receiver
+
+  route:
+    receiver: default-receiver
+    group_wait: 30s
+    group_interval: 5m
+    repeat_interval: 12h
+    group_by:
+      - alertname
+    routes:
+      - matchers:
+          - team = platform
+        receiver: platform-team-receiver
+        continue: true
+
+configmapReload:
+  enabled: true
+  resources:
+    limits:
+      cpu: 200m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+extraVolumes:
+  - name: eda-webhook
+    secret:
+      secretName: eda-webhook-token
+      defaultMode: 420
+      items:
+        - key: webhook-token
+          path: webhook-token
+        - key: webhook-url
+          path: webhook-url
+extraVolumeMounts:
+  - name: eda-webhook
+    mountPath: /etc/alertmanager/eda-webhook
+    readOnly: true

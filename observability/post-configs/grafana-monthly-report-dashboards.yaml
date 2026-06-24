@@ -1,0 +1,43 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: monthly-report
+  namespace: grafana-operator
+spec:
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  resyncPeriod: 1m
+  title: Monthly-Report
+  uid: monthly-report
+  permissions: |
+    {
+      "items": [
+        {
+          "role": "Admin",
+          "permission": 4
+        },
+        {
+          "role": "Editor",
+          "permission": 2
+        }
+      ]
+    }
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: storage-and-compute
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: monthly-report
+  uid: storage-and-compute
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: storage-and-compute-dashboard
+    key: json

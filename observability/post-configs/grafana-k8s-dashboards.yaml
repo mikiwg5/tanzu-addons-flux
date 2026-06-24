@@ -1,0 +1,278 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: kubernetes
+  namespace: grafana-operator
+spec:
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  resyncPeriod: 1m
+  title: Kubernetes
+  uid: kubernetes
+  permissions: |
+    {
+      "items": [
+        {
+          "role": "Admin",
+          "permission": 4
+        },
+        {
+          "role": "Editor",
+          "permission": 2
+        }
+      ]
+    }
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: high-level-cluster-stats
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: high-level-cluster-stats
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: high-level-cluster-stats-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: contour-ingress
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: contour-ingress
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: contour-ingress-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: core-dns
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: core-dns
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: core-dns-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: envoy-proxy
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: envoy-proxy
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: envoy-proxy-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: etcd-cluster-overview
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: etcd-cluster-overview
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: etcd-cluster-overview-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: flux-cluster-stats
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: flux-cluster-stats
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: flux-cluster-stats-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: flux2
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: flux2
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: flux2-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-api-server
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: k8s-api-server
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: k8s-api-server-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-cluster-statistics
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: k8s-cluster-statistics
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: k8s-cluster-statistics-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: node-pod-stats
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: node-pod-stats
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: node-pod-stats-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: node-details
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: node-details
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: node-details-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: pod-details
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: pod-details
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: pod-details-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: pvc-stats
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: pvc-stats
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: pvc-stats-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: k8s-node-status
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: kubernetes
+  uid: k8s-node-status
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: k8s-node-status-dashboard
+    key: json
+

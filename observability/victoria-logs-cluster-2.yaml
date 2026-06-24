@@ -1,0 +1,34 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vlc2
+  namespace: victoria-logs
+spec:
+  interval: 1m
+  timeout: 40m
+  chart:
+    spec:
+      chart: victoria-logs-cluster
+      version: 0.0.11
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  releaseName: vlc2
+  dependsOn:
+  - name: kyverno
+    namespace: kyverno
+  - name: kube-prometheus
+    namespace: kube-prometheus
+  - name: vlc1
+    namespace: victoria-logs
+  valuesFrom:
+  - kind: ConfigMap
+    name: victoria-logs-values
+  postRenderers:
+  - kustomize:
+      images:
+      - name: victoriametrics/victoria-logs:v1.33.0
+        newName: ${registry_host}.safaricomet.net/platform/victoria-logs-cluster-images
+        digest: sha256:d43f95621b946ab6aecdb42b85cbfc6760888617ed281dcbdc9780ce01d75d5e

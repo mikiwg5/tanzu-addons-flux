@@ -1,0 +1,61 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- otel-collector-bearertoken.yaml
+- otel-infra.yaml
+- otel-idrac.yaml
+- otel-infra-urls.yaml
+- avi-api-proxy-prod.yaml
+- pmax-exporter.yaml
+- powerscale-exporter.yaml
+# - netscaler-adc-metrics-exporter.yaml
+configMapGenerator:
+- files:
+  - idrac-targets.yaml=mdc1-idrac-targets.yaml
+  name: mdc1-idrac-targets
+  namespace: otel-gateway
+  options:
+    disableNameSuffixHash: true
+- files:
+  - idrac-targets.yaml=mdc2-idrac-targets.yaml
+  name: mdc2-idrac-targets
+  namespace: otel-gateway
+  options:
+    disableNameSuffixHash: true
+- files:
+  - infra-urls-targets.yaml=infra-urls-targets.yaml
+  name: infra-urls-targets
+  namespace: otel-gateway
+  options:
+    disableNameSuffixHash: true
+- files:
+  - pmax_config.json=mdc1-pmax-exporter-config.json
+  name: mdc1-pmax-exporter-config
+  namespace: otel-gateway
+  options:
+    disableNameSuffixHash: true
+- files:
+  - pmax_config.json=mdc2-pmax-exporter-config.json
+  name: mdc2-pmax-exporter-config
+  namespace: otel-gateway
+  options:
+    disableNameSuffixHash: true
+- files:
+  - powerscale-exporter-config.toml=powerscale-exporter-config.toml
+  name: powerscale-exporter-config
+  namespace: otel-gateway
+  options:
+    disableNameSuffixHash: true
+
+# - files:
+#   - netscaler-adc-targets.yaml=mdc1-netscaler-targets.yaml
+#   name: mdc1-netscaler-adc-targets
+#   namespace: otel-gateway
+#   options:
+#     disableNameSuffixHash: true
+# - files:
+#   - netscaler-adc-targets.yaml=mdc2-netscaler-targets.yaml
+#   name: mdc2-netscaler-adc-targets
+#   namespace: otel-gateway
+#   options:
+#     disableNameSuffixHash: true

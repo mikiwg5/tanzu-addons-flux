@@ -1,0 +1,8 @@
+controllerManager:
+  enabledWebHooks: true
+  arguments:
+    cluster-resource-namespace: cert-manager
+simulator:
+  enabled: false
+  exampleCertificate:
+    enabled: false

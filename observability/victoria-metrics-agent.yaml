@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: victoria-metrics-gateway
+  namespace: victoria-metrics
+  labels:
+    app: victoria-metrics-gateway
+spec:
+  selector:
+    matchLabels:
+      app: victoria-metrics-gateway
+  serviceName: victoria-metrics-gateway
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: victoria-metrics-gateway
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: victoria-metrics-gateway
+        image: ${registry_host}.safaricomet.net/platform/vmagent:v1.129.1
+        args:
+        - -remoteWrite.tmpDataPath=/data/tmp
+        - -httpListenAddr=:8429
+        - -remoteWrite.maxDiskUsagePerURL=90GiB
+        - -remoteWrite.url=http://victoria-metrics-victoria-metrics-cluster-vminsert.victoria-metrics.svc.cluster.local:8480/insert/0/prometheus
+        ports:
+        - containerPort: 8429
+          name: http
+        volumeMounts:
+        - name: tmp-store
+          mountPath: /data/tmp
+        resources:
+          requests:
+            memory: 1800Mi
+            cpu: 750m
+          limits:
+            memory: 2560Mi
+            cpu: 1000m
+  volumeClaimTemplates:
+  - metadata:
+      name: tmp-store
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: victoria-metrics-gateway
+  namespace: victoria-metrics
+  labels:
+    app: victoria-metrics-gateway
+spec:
+  selector:
+    app: victoria-metrics-gateway
+  ports:
+  - protocol: TCP
+    port: 8429
+    targetPort: http
+    name: http
+  type: ClusterIP
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: victoria-metrics-gateway
+  namespace: victoria-metrics
+spec:
+  endpoints:
+  - port: http
+  selector:
+    matchLabels:
+      app: victoria-metrics-gateway
+  namespaceSelector:
+    matchNames:
+    - victoria-metrics

@@ -1,0 +1,52 @@
+exporters:
+  debug/extra:
+    verbosity: detailed
+
+extensions:
+  bearertokenauth:
+    filename: /secrets/bearertokens/tokens
+
+processors:
+  filter/debug-log:
+    error_mode: ignore
+    logs:
+      log_record:
+      - IsMatch(body, "DEBUG") or IsMatch(body, "TRACE")
+  filter/included-namespace-to-splunk:
+    # Only being sent to splunk_hec/platform_logs to reduce load on splunk
+    # for specific namespaces only (btn-ekyc, safari-snd, bigdata-ekyc, vas-ussd, mwj4u, oneplatform,tech5)
+    error_mode: ignore
+    logs:
+      log_record:
+      - not (resource.attributes["k8s.namespace.name"] == "btn-ekyc" or resource.attributes["k8s.namespace.name"] == "safari-snd" or resource.attributes["k8s.namespace.name"] == "bigdata-ekyc" or resource.attributes["k8s.namespace.name"] == "vas-ussd" or resource.attributes["k8s.namespace.name"] == "mwj4u" or resource.attributes["k8s.namespace.name"] == "oneplatform" or IsMatch(resource.attributes["k8s.namespace.name"], "dubi.*") or IsMatch(resource.attributes["k8s.namespace.name"], "emsapp-ns") or IsMatch(resource.attributes["k8s.namespace.name"], "saka-hub-.*") or resource.attributes["k8s.namespace.name"] == "tech5" or resource.attributes["k8s.namespace.name"] == "mpesa-channels" or resource.attributes["k8s.namespace.name"] == "mpesa-integrations" or resource.attributes["k8s.namespace.name"] == "dxl" )
+
+service:
+  extensions:
+  - bearertokenauth
+  - file_storage
+  - health_check
+  - k8s_observer
+  - zpages
+  pipelines:
+    logs/to-splunk:
+      exporters:
+      # Only being sent to splunk_hec/platform_logs to reduce load on splunk
+      # for specific namespaces only (btn-ekyc, safari-snd, bigdata-ekyc, vas-ussd)
+      - splunk_hec/platform_logs
+      processors:
+      - memory_limiter
+      - k8sattributes
+      - k8sattributes/service-logs
+      - filter/logs
+      - filter/debug-log
+      - filter/included-namespace-to-splunk
+      - batch
+      - resourcedetection
+      - resource
+      - resource/logs
+      - resource/service-logs
+      - resource/add_environment
+      - transform/parse_envoy_json_body
+      receivers:
+      - filelog
+      - otlp

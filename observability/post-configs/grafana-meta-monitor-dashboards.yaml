@@ -1,0 +1,133 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: meta-monitoring
+  namespace: grafana-operator
+spec:
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  resyncPeriod: 1m
+  title: Meta Monitoring
+  uid: meta-monitoring
+  permissions: |
+    {
+      "items": [
+        {
+          "role": "Admin",
+          "permission": 4
+        },
+        {
+          "role": "Editor",
+          "permission": 2
+        }
+      ]
+    }
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: victorialogs-cluster
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: meta-monitoring
+  uid: victorialogs-cluster
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: victorialogs-cluster-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: victorialogs-vlagent
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: meta-monitoring
+  uid: victorialogs-vlagent
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: victorialogs-vlagent-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: victoriametrics-cluster
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: meta-monitoring
+  uid: victoriametrics-cluster
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: victoriametrics-cluster-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: victoriametrics-vmagent
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: meta-monitoring
+  uid: victoriametrics-vmagent
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: victoriametrics-vmagent-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: victoriametrics-vmalert
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: meta-monitoring
+  uid: victoriametrics-vmalert
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: victoriametrics-vmalert-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: victoriametrics-vmauth
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: meta-monitoring
+  uid: victoriametrics-vmauth
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: victoriametrics-vmauth-dashboard
+    key: json

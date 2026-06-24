@@ -1,0 +1,72 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ecs-s3-endpoint.yaml
+- alertmanager.yaml
+- victoria-metrics-cluster.yaml
+- victoria-metrics-agent.yaml
+- victoria-metrics-vmalert.yaml
+- victoria-logs-cluster-1.yaml
+- victoria-logs-cluster-2.yaml
+- victoria-logs-agent.yaml
+- victoria-metrics-auth.yaml
+- victoria-logs-vmalert.yaml
+- tempo.yaml
+- postgresql-ha.yaml
+- grafana-operator.yaml
+- otel-gateway.yaml
+configMapGenerator:
+- files:
+  - values.yaml=helm-values/alertmanager.yaml
+  name: alertmanager-values
+  namespace: alertmanager
+  options:
+    disableNameSuffixHash: true
+- files:
+  - values.yaml=helm-values/victoria-metrics-cluster.yaml
+  name: victoria-metrics-values
+  namespace: victoria-metrics
+  options:
+    disableNameSuffixHash: true
+- files:
+  - values.yaml=helm-values/victoria-metrics-vmalert.yaml
+  name: victoria-metrics-vmalert-values
+  namespace: victoria-metrics
+  options:
+    disableNameSuffixHash: true
+- files:
+  - values.yaml=helm-values/victoria-logs-cluster.yaml
+  name: victoria-logs-values
+  namespace: victoria-logs
+  options:
+    disableNameSuffixHash: true
+- files:
+  - values.yaml=helm-values/victoria-metrics-auth.yaml
+  name: victoria-metrics-auth-values
+  namespace: victoria-logs
+  options:
+    disableNameSuffixHash: true
+- files:
+  - values.yaml=helm-values/victoria-logs-vmalert.yaml
+  name: victoria-logs-vmalert-values
+  namespace: victoria-logs
+  options:
+    disableNameSuffixHash: true
+- files:
+  - values.yaml=helm-values/tempo.yaml
+  name: tempo-values
+  namespace: tempo
+  options:
+    disableNameSuffixHash: true
+- files:
+  - values.yaml=helm-values/postgresql-ha.yaml
+  name: postgresql-ha-values
+  namespace: postgresql-ha
+  options:
+    disableNameSuffixHash: true
+- files:
+  - values.yaml=helm-values/grafana-operator.yaml
+  name: grafana-operator-values
+  namespace: grafana-operator
+  options:
+    disableNameSuffixHash: true

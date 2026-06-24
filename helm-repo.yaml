@@ -1,0 +1,11 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: local-harbor-helm-repo
+  namespace: flux-system
+spec:
+  interval: 30m0s
+  type: oci
+  url: oci://${registry_host}.safaricomet.net/platform
+  certSecretRef:
+    name: safaricomet.net-tls

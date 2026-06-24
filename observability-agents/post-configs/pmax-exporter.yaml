@@ -1,0 +1,90 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: pmax-exporter-secret
+  namespace: otel-gateway
+spec:
+  refreshPolicy: OnChange
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: external-secrets-cluster-secret-store
+  target:
+    name: pmax-exporter-secret
+    creationPolicy: Owner
+  data:
+  - secretKey: pmax_username
+    remoteRef:
+      key: k8s-common/cloud/monitoring/powermax-credentials
+      property: pmax_username
+  - secretKey: pmax_password
+    remoteRef:
+      key: k8s-common/cloud/monitoring/powermax-credentials
+      property: pmax_password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pmax-exporter
+  namespace: otel-gateway
+  labels:
+    app: pmax-exporter
+spec:
+  selector:
+    matchLabels:
+      app: pmax-exporter
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: pmax-exporter
+    spec:
+      containers:
+      - name: pmax-exporter
+        image: ${registry_host}.safaricomet.net/platform/pmaxperfpy:latest
+        args:
+        - --config-file=/etc/pmaxperfpy/pmax_config.json
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        env:
+        - name: PMAX_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: pmax-exporter-secret
+              key: pmax_username
+        - name: PMAX_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pmax-exporter-secret
+              key: pmax_password
+        ports:
+        - containerPort: 8080
+          name: pmax-exporter
+        volumeMounts:
+        - name: pmax-config
+          mountPath: /etc/pmaxperfpy
+      volumes:
+      - name: pmax-config
+        configMap:
+          name: ${datacenter}-pmax-exporter-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pmax-exporter
+  namespace: otel-gateway
+  labels:
+    app: pmax-exporter
+spec:
+  selector:
+    app: pmax-exporter
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: ClusterIP

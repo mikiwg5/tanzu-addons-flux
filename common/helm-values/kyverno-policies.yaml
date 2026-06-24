@@ -1,0 +1,58 @@
+podSecurityStandard: custom
+podSecurityPolicies:
+- disallow-privileged-containers
+- disallow-host-ports
+- disallow-capabilities
+- disallow-host-process
+- disallow-host-namespaces
+- disallow-host-path
+- disallow-proc-mount
+validationFailureAction: Enforce
+validationFailureActionByPolicy:
+  disallow-privileged-containers: Audit
+  disallow-host-ports: Audit
+  disallow-capabilities: Audit
+  disallow-host-process: Audit
+policyExclude:
+  disallow-privileged-containers:
+    any:
+    - resources:
+        namespaceSelector:
+          matchLabels:
+            kyverno.io/exclude-rule: "true"
+  disallow-host-ports:
+    any:
+    - resources:
+        namespaceSelector:
+          matchLabels:
+            kyverno.io/exclude-rule: "true"
+  disallow-capabilities:
+    any:
+    - resources:
+        namespaceSelector:
+          matchLabels:
+            kyverno.io/exclude-rule: "true"
+  disallow-host-process:
+    any:
+    - resources:
+        namespaceSelector:
+          matchLabels:
+            kyverno.io/exclude-rule: "true"
+  disallow-host-namespaces:
+    any:
+    - resources:
+        namespaceSelector:
+          matchLabels:
+            kyverno.io/exclude-rule: "true"
+  disallow-host-path:
+    any:
+    - resources:
+        namespaceSelector:
+          matchLabels:
+            kyverno.io/exclude-rule: "true"
+  disallow-proc-mount:
+    any:
+    - resources:
+        namespaceSelector:
+          matchLabels:
+            kyverno.io/exclude-rule: "true"

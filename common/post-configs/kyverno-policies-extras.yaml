@@ -1,0 +1,353 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-emptydir-sizelimit
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: none
+    policies.kyverno.io/title: Add emptyDir sizeLimit
+    policies.kyverno.io/category: Other
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    kyverno.io/kyverno-version: 1.7.3,1.8.0-rc2
+    kyverno.io/kubernetes-version: "1.24"
+    policies.kyverno.io/description: "When a Pod requests an emptyDir, by default it does not have a size limit which may allow it to consume excess or all of the space in the medium backing the volume. This can quickly overrun a Node and may result in a denial of service for other workloads. This policy adds a sizeLimit field to all Pods mounting emptyDir volumes, if not present, and sets it to 1Gi.      "
+spec:
+  rules:
+  - name: mutate-emptydir
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    mutate:
+      foreach:
+      - list: "request.object.spec.volumes[]"
+        preconditions:
+          all:
+          - key: "{{element.keys(@)}}"
+            operator: AnyIn
+            value: emptyDir
+          - key: "{{element.emptyDir.sizeLimit || ''}}"
+            operator: Equals
+            value: ''
+        patchesJson6902: |-
+          - path: "/spec/volumes/{{elementIndex}}/emptyDir/sizeLimit"
+            op: add
+            value: 1Gi
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  annotations:
+    policies.kyverno.io/category: Sample
+    policies.kyverno.io/description: 'Labels are used as an important source of metadata describing objects in various ways or triggering other functionality. Labels are also a very basic concept and should be used throughout Kubernetes. This policy performs a simple mutation which adds a label `pod-security.kubernetes.io/enforce=privileged` to Namespaces to late kyverno manage Pod Security Admission (PSA).      '
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Label
+    policies.kyverno.io/title: Add Labels
+  name: add-psa-privilaged-label
+spec:
+  admission: true
+  background: true
+  generateExisting: true
+  rules:
+  - match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+    mutate:
+      patchStrategicMerge:
+        metadata:
+          labels:
+            pod-security.kubernetes.io/enforce: privileged
+    name: add-labels
+    skipBackgroundRequests: true
+  validationFailureAction: Audit
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  annotations:
+    kyverno.io/kubernetes-version: "1.21"
+    kyverno.io/kyverno-version: 1.6.0
+    policies.kyverno.io/category: Other, EKS Best Practices
+    policies.kyverno.io/description: A new ServiceAccount called `default` is created whenever a new Namespace is created. Pods spawned in that Namespace, unless otherwise set, will be assigned this ServiceAccount. This policy mutates any new `default` ServiceAccounts to disable auto-mounting of the token into Pods obviating the need to do so individually.
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: ServiceAccount
+    policies.kyverno.io/title: Disable automountServiceAccountToken
+  name: disable-automountserviceaccounttoken
+spec:
+  admission: true
+  background: true
+  rules:
+  - match:
+      any:
+      - resources:
+          kinds:
+          - ServiceAccount
+          names:
+          - default
+    mutate:
+      patchStrategicMerge:
+        automountServiceAccountToken: false
+    name: disable-automountserviceaccounttoken
+    skipBackgroundRequests: true
+  validationFailureAction: enforce
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  annotations:
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/description: An ingress resource needs to define an actual host name in order to be valid. This policy ensures that there is a hostname for each rule defined.
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Ingress
+    policies.kyverno.io/title: Disallow empty Ingress host
+  name: disallow-empty-ingress-host
+spec:
+  admission: true
+  background: false
+  rules:
+  - match:
+      any:
+      - resources:
+          kinds:
+          - Ingress
+    name: disallow-empty-ingress-host
+    skipBackgroundRequests: true
+    validate:
+      deny:
+        conditions:
+          all:
+          - key: '{{ request.object.spec.rules[].host || `[]` | length(@) }}'
+            operator: NotEquals
+            value: '{{ request.object.spec.rules[].http || `[]` | length(@) }}'
+      message: The Ingress host name must be defined, not empty.
+  validationFailureAction: enforce
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  annotations:
+    kyverno.io/kubernetes-version: "1.26"
+    policies.kyverno.io/category: Best Practices, EKS Best Practices
+    policies.kyverno.io/description: Images from unknown, public registries can be of dubious quality and may not be scanned and secured, representing a high degree of risk. Requiring use of known, approved registries helps reduce threat exposure by ensuring image pulls only come from them. This policy validates that container images only originate from the registry `eu.foo.io` or `bar.io`. Use of this policy requires customization to define your allowable registries.
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/title: Restrict Image Registries
+  name: restrict-image-registries
+spec:
+  admission: true
+  background: true
+  rules:
+  - match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    exclude:
+      any:
+      - resources:
+          namespaceSelector:
+            matchLabels:
+              kyverno.io/exclude-rule: "true"
+    name: validate-registries
+    skipBackgroundRequests: true
+    validate:
+      message: All images in this Pod must come from an authorized repository.
+      pattern:
+        spec:
+          =(ephemeralContainers):
+          - image: mdc1-sfcr.safaricomet.net/* | mdc2-sfcr.safaricomet.net/* | sfcr.safaricomet.net/*
+          =(initContainers):
+          - image: mdc1-sfcr.safaricomet.net/* | mdc2-sfcr.safaricomet.net/* | sfcr.safaricomet.net/*
+          containers:
+          - image: mdc1-sfcr.safaricomet.net/* | mdc2-sfcr.safaricomet.net/* | sfcr.safaricomet.net/*
+  validationFailureAction: enforce
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  annotations:
+    policies.kyverno.io/category: Sample
+    policies.kyverno.io/description: 'Secrets like registry credentials often need to exist in multiple Namespaces so Pods there have access. Manually duplicating those Secrets is time consuming and error prone. This policy will copy a Secret called `regcred` which exists in the `default` Namespace to new Namespaces when they are created. It will also push updates to the copied Secrets should the source Secret be changed.      '
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/subject: Secret
+    policies.kyverno.io/title: Sync Secrets
+  name: sync-secrets
+spec:
+  admission: true
+  background: true
+  generateExisting: true
+  rules:
+  - generate:
+      apiVersion: v1
+      clone:
+        name: regcred
+        namespace: default
+      kind: Secret
+      name: regcred
+      namespace: '{{request.object.metadata.name}}'
+      synchronize: true
+    match:
+      any:
+      - resources:
+          kinds:
+          - Namespace
+    name: sync-image-pull-secret
+    skipBackgroundRequests: true
+  validationFailureAction: enforce
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-certificates-volume
+  annotations:
+    policies.kyverno.io/title: Add Certificates as a Volume
+    policies.kyverno.io/category: Sample
+    policies.kyverno.io/subject: Pod,Volume
+    kyverno.io/kyverno-version: 1.6.0
+    kyverno.io/kubernetes-version: "1.21"
+    policies.kyverno.io/minversion: 1.5.0
+    pod-policies.kyverno.io/autogen-controllers: DaemonSet,Deployment,Job,StatefulSet
+    policies.kyverno.io/description: "In some cases you would need to trust custom CA certificates for all the containers of a Pod. It makes sense to be in a ConfigMap so that you can automount them by only setting an annotation. This policy adds a volume to all containers in a Pod containing the certificate if the annotation called `inject-certs` with value `enabled` is found.      "
+spec:
+  background: false
+  rules:
+  - name: add-ssl-certs
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    preconditions:
+      all:
+      - key: '{{request.object.metadata.annotations."inject-certs" || ""}}'
+        operator: Equals
+        value: enabled
+      - key: "{{request.operation || 'BACKGROUND'}}"
+        operator: AnyIn
+        value:
+        - CREATE
+        - UPDATE
+    mutate:
+      foreach:
+      - list: "request.object.spec.containers"
+        patchStrategicMerge:
+          spec:
+            containers:
+            - name: "{{ element.name }}"
+              volumeMounts:
+              - name: etc-ssl-certs
+                mountPath: /etc/ssl/certs
+            volumes:
+            - configMap:
+                items:
+                - key: ca-certificates.crt
+                  path: ca-certificates.crt
+                name: safaricomet.net
+              name: etc-ssl-certs
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-requests-limits
+  annotations:
+    policies.kyverno.io/title: Require Limits and Requests
+    policies.kyverno.io/category: Best Practices, EKS Best Practices
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/description: >-
+      As application workloads share cluster resources, it is important to limit resources requested and consumed by each Pod. It is recommended to require resource requests and limits per Pod, especially for memory and CPU. If a Namespace level request or limit is specified, defaults will automatically be applied to each Pod based on the LimitRange configuration. This policy validates that all containers have something specified for memory and CPU requests and memory limits.
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+  - name: validate-resources
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    exclude:
+      any:
+      - resources:
+          namespaceSelector:
+            matchLabels:
+              kyverno.io/exclude-rule: "true"
+    validate:
+      message: "CPU and memory resource requests and limits are required for containers."
+      pattern:
+        spec:
+          containers:
+          - resources:
+              requests:
+                memory: "?*"
+                cpu: "?*"
+              limits:
+                memory: "?*"
+                cpu: "?*"
+          =(initContainers):
+          - resources:
+              requests:
+                memory: "?*"
+                cpu: "?*"
+              limits:
+                memory: "?*"
+                cpu: "?*"
+          =(ephemeralContainers):
+          - resources:
+              requests:
+                memory: "?*"
+                cpu: "?*"
+              limits:
+                memory: "?*"
+                cpu: "?*"
+---
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-default-ephemeral-storage-resource-limits
+  annotations:
+    policies.kyverno.io/title: Add Default Ephemeral Storage Resource Limits
+    policies.kyverno.io/category: Other
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/minversion: 1.7.0
+    kyverno.io/kubernetes-version: "1.26"
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      Kubernetes Pods can specify resource requests and limits for ephemeral storage. This is important to ensure that Pods do not consume all of the ephemeral storage available on a Node, which can lead to performance issues or even cause the Node to become unresponsive. This policy adds a default ephemeral storage limit of 1Gi to pods with label `app: mw-interactclone` that do not specify a limit for ephemeral  storage. This helps ensure that Pods have a reasonable limit on the amount of  ephemeral storage they can use, while still allowing them to use more if needed.   
+spec:
+  background: false
+  rules:
+  - name: add-default-requests
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          selector:
+            matchLabels:
+              app: mw-interactclone
+    preconditions:
+      any:
+      - key: "{{request.operation || 'BACKGROUND'}}"
+        operator: AnyIn
+        value:
+        - CREATE
+        - UPDATE
+    mutate:
+      foreach:
+      - list: "request.object.spec.[ephemeralContainers, initContainers, containers][]"
+        patchStrategicMerge:
+          spec:
+            containers:
+            - (name): "{{element.name}}"
+              resources:
+                limits:
+                  +(ephemeral-storage): "1Gi"

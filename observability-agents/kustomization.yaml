@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- idrac-exporter.yaml
+configMapGenerator:
+- files:
+  - values.yaml=helm-values/idrac-exporter.yaml
+  name: idrac-exporter-values
+  namespace: otel-gateway
+  options:
+    disableNameSuffixHash: true

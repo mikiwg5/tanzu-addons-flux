@@ -1,0 +1,441 @@
+nameOverride: vmalert
+
+server:
+  replicaCount: 2
+  datasource:
+    url: http://victoria-metrics-victoria-metrics-cluster-vmselect.victoria-metrics.svc.cluster.local:8481/select/0/prometheus
+
+  remote:
+    write:
+      url: http://victoria-metrics-victoria-metrics-cluster-vminsert.victoria-metrics.svc.cluster.local:8480/insert/0/prometheus
+    read:
+      url: http://victoria-metrics-victoria-metrics-cluster-vmselect.victoria-metrics.svc.cluster.local:8481/select/0/prometheus
+
+  notifier:
+    alertmanager:
+      url: http://alertmanager-0.alertmanager-headless.alertmanager.svc.cluster.local:9093
+  notifiers:
+  - alertmanager:
+      url: http://alertmanager-1.alertmanager-headless.alertmanager.svc.cluster.local:9093
+
+  extraArgs:
+    envflag.enable: true
+    envflag.prefix: VM_
+    loggerFormat: json
+    httpListenAddr: :8880
+    rule:
+    - /config/alert-rules.yaml
+    external.url: https://${datacenter}-observe.safaricomet.net
+    external.alert.source: 'explore?left={"datasource":"victoria-metrics","queries":[{"expr":{{ .Expr|jsonEscape|queryEscape }},"refId":"A"}],"range":{"from":"now-1h","to":"now"}}'
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+  config:
+    alerts:
+      groups:
+      - name: kubernetes-cluster-alerts
+        rules:
+        - alert: K8sClusterNotHealthy
+          expr: sum by(k8s_cluster_name) (k8s_node_condition{condition="Ready"}) / count by(k8s_cluster_name) (system_uptime_seconds) != 1
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes Cluster {{ $labels.k8s_cluster_name }} is not healthy for more than 5 minutes
+            summary: Kubernetes Cluster Not Healthy
+      - name: kubernetes-node-alerts
+        rules:
+        - alert: K8sNodeNotReady
+          expr: k8s_node_condition{condition="Ready"} == 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes Node {{ $labels.k8s_node_name }} in {{ $labels.k8s_cluster_name }} cluster is not ready for more than 5 minutes
+            summary: Kubernetes Node Not Ready
+        - alert: K8sNodeDiskPressure
+          expr: k8s_node_condition{condition="DiskPressure"} == 1
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes Node {{ $labels.k8s_node_name }} in {{ $labels.k8s_cluster_name }} cluster is experiencing disk pressure
+            summary: Kubernetes Node Disk Pressure
+        - alert: K8sNodeMemoryPressure
+          expr: k8s_node_condition{condition="MemoryPressure"} == 1
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes Node {{ $labels.k8s_node_name }} in {{ $labels.k8s_cluster_name }} cluster is experiencing memory pressure
+            summary: Kubernetes Node Memory Pressure
+        - alert: K8sNodePIDPressure
+          expr: k8s_node_condition{condition="PIDPressure"} == 1
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes Node {{ $labels.k8s_node_name }} in {{ $labels.k8s_cluster_name }} cluster is experiencing PID pressure
+            summary: Kubernetes Node PID Pressure
+        - alert: HighK8sNodeCPUUsagePerState
+          expr: avg(system_cpu_utilization_ratio{state!~"idle|wait"}) by (state, k8s_cluster_name, k8s_node_name)  > 0.85
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes Node {{ $labels.k8s_node_name }} in {{ $labels.k8s_cluster_name }} cluster in state {{ $labels.state }} has high CPU usage exceeding 85% for more than 5 minutes
+            summary: High CPU Usage on Kubernetes Node
+        - alert: K8sNodeRecentlyRebootedOrCreated
+          expr: system_uptime_seconds{k8s_cluster_name!=""} < 600
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes Node {{ $labels.k8s_node_name }} in {{ $labels.k8s_cluster_name }} cluster has been rebooted or created within the last 10 minutes
+            summary: Kubernetes Node Recently Rebooted or Created
+        - alert: HighK8sNodeIOWait
+          expr: avg(system_cpu_utilization_ratio{state="wait"}) by (k8s_cluster_name, k8s_node_name) > 0.05
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes Node {{ $labels.k8s_node_name }} in {{ $labels.k8s_cluster_name }} cluster is experiencing high IO wait time exceeding 5% for more than 5 minutes
+            summary: High IO Wait Time on Kubernetes Node
+        - alert: LowK8sAvailableMemory - Memory Pressure Imminent
+          expr: k8s_node_memory_available_bytes < 500000000
+          for: 10m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes Node {{ $labels.k8s_node_name }} in {{ $labels.k8s_cluster_name }} cluster has available memory below 500MB for more than 10 minutes
+            summary: Low Available Memory on Kubernetes Node - Memory Pressure Imminent
+        - alert: HighK8sNodeFileSystemUsage
+          expr: system_filesystem_utilization_ratio{k8s_cluster_name!=""} > 0.9
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes Node {{ $labels.k8s_node_name }} in {{ $labels.k8s_cluster_name }} cluster on {{ $labels.mountpoint }} mountpoint has high file system usage exceeding 90% for more than 5 minutes
+            summary: High File System Usage on Kubernetes Node
+      - name: physical-server-hardware-alerts
+        rules:
+        - alert: CriticalHardwareSystemHealth
+          expr: idrac_system_health{status="Critical"} * on (instance) group_left (hostname) idrac_system_machine_info > 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Physical server {{ $labels.hostname }}({{ $labels.instance }}) has critical hardware system health issues
+            summary: Critical Hardware System Health
+        - alert: WarningHardwareSystemHealth
+          expr: idrac_system_health{status="Warning"} * on (instance) group_left (hostname) idrac_system_machine_info > 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Physical server {{ $labels.hostname }}({{ $labels.instance }}) has warning hardware system health issues
+            summary: Warning Hardware System Health
+        - alert: HardwareSystemNotPoweredOn
+          expr: idrac_system_power_on * on (instance) group_left (hostname) idrac_system_machine_info == 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Physical server {{ $labels.hostname }}({{ $labels.instance }}) is not powered on
+            summary: Hardware System Not Powered On
+      - name: kubernetes-pvc-alerts
+        rules:
+        - alert: HighK8sPVCCapacityUsage
+          expr: 1 - (avg by (k8s_persistentvolumeclaim_name, k8s_namespace_name, k8s_cluster_name) (k8s_volume_available_bytes{k8s_volume_type="persistentVolumeClaim"}) / avg by (k8s_persistentvolumeclaim_name, k8s_namespace_name, k8s_cluster_name) (k8s_volume_capacity_bytes{k8s_volume_type="persistentVolumeClaim"})) > 0.85
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Kubernetes PVC {{ $labels.k8s_persistentvolumeclaim_name }} in namespace {{ $labels.k8s_namespace_name }} of cluster {{ $labels.k8s_cluster_name }} is using more than 85% of its capacity for more than 5 minutes
+            summary: High PVC Capacity Usage
+      - name: opentelemetry-collector-agents-alerts
+        rules:
+        - alert: OTelCollectorAgentNotRunning
+          expr: up{job="otel-agent",k8s_namespace_name="splunk"} == 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: OpenTelemetry Collector Agent on kubernetes node {{ $labels.k8s_node_name }} in cluster {{ $labels.k8s_cluster_name }} is not running for more than 5 minutes
+            summary: OpenTelemetry Collector Agent Not Running
+        - alert: HighOTelCollectorAgentExporterFailedLogRecords
+          expr: sum by (exporter) (rate(otelcol_exporter_send_failed_log_records_total{job="otel-agent",k8s_namespace_name="splunk"}[5m])) > 100
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: OpenTelemetry Collector Agents have failed to send log records for {{ $labels.exporter }} exporter for more than 5 minutes
+            summary: OpenTelemetry Collector Agent Exporter Failed Log Records
+        - alert: HighOTelCollectorAgentExporterFailedMetrics
+          expr: sum by (exporter) (rate(otelcol_exporter_send_failed_metric_points_total{job="otel-agent",k8s_namespace_name="splunk"}[5m])) > 1000
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: OpenTelemetry Collector Agents have failed to send metric points for {{ $labels.exporter }} exporter for more than 5 minutes
+            summary: OpenTelemetry Collector Agent Exporter Failed Metrics
+        - alert: HighOTelCollectorAgentExporterFailedTraces
+          expr: sum by (exporter) (rate(otelcol_exporter_send_failed_spans_total{job="otel-agent",k8s_namespace_name="splunk"}[5m])) > 100
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: OpenTelemetry Collector Agents have failed to send spans for {{ $labels.exporter }} exporter for more than 5 minutes
+            summary: OpenTelemetry Collector Agent Exporter Failed Traces
+        - alert: HighOTelCollectorAgentExporterQueueSize
+          expr: sum by (exporter, data_type) (otelcol_exporter_queue_size{job="otel-agent",k8s_namespace_name="splunk"}) > 1000
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: OpenTelemetry Collector Agents have high exporter queue size for {{ $labels.exporter }} exporter in {{ $labels.data_type }} data type exceeding 1000 for more than 5 minutes
+            summary: OpenTelemetry Collector Agent Exporter Queue Size Too High
+      - name: opentelemetry-collector-gateway-alerts
+        rules:
+        - alert: OTelCollectorGatewayNotRunning
+          expr: up{host_name=~"otel-gateway-.+",job="otelcol-contrib",k8s_namespace_name="otel-gateway"} == 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: OpenTelemetry Collector Gateway on kubernetes node {{ $labels.k8s_node_name }} in cluster {{ $labels.k8s_cluster_name }} is not running for more than 5 minutes
+            summary: OpenTelemetry Collector Gateway Not Running
+        - alert: HighOTelCollectorGatewayExporterFailedLogRecords
+          expr: sum by (exporter) (rate(otelcol_exporter_send_failed_log_records_total{host_name=~"otel-gateway-.+",job="otelcol-contrib",k8s_namespace_name="otel-gateway"}[5m])) > 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: OpenTelemetry Collector Gateway has failed to send log records for {{ $labels.exporter }} exporter for more than 5 minutes
+            summary: OpenTelemetry Collector Gateway Exporter Failed Log Records
+        - alert: HighOTelCollectorGatewayExporterFailedMetrics
+          expr: sum by (exporter) (rate(otelcol_exporter_send_failed_metric_points_total{host_name=~"otel-gateway-.+",job="otelcol-contrib",k8s_namespace_name="otel-gateway"}[5m])) > 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: OpenTelemetry Collector Gateway has failed to send metric points for {{ $labels.exporter }} exporter for more than 5 minutes
+            summary: OpenTelemetry Collector Gateway Exporter Failed Metrics
+        - alert: HighOTelCollectorGatewayExporterFailedTraces
+          expr: sum by (exporter) (rate(otelcol_exporter_send_failed_spans_total{host_name=~"otel-gateway-.+",job="otelcol-contrib",k8s_namespace_name="otel-gateway"}[5m])) > 0
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: OpenTelemetry Collector Gateway has failed to send spans for {{ $labels.exporter }} exporter for more than 5 minutes
+            summary: OpenTelemetry Collector Gateway Exporter Failed Traces
+        - alert: HighOTelCollectorGatewayExporterQueueSize
+          expr: sum by (exporter, data_type) (otelcol_exporter_queue_size{host_name=~"otel-gateway-.+",job="otelcol-contrib",k8s_namespace_name="otel-gateway"}) > 1000
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: OpenTelemetry Collector Gateway has high exporter queue size for {{ $labels.exporter }} exporter in {{ $labels.data_type }} data type exceeding 1000 for more than 5 minutes
+            summary: OpenTelemetry Collector Gateway Exporter Queue Size Too High
+      - name: fluxcd-alerts
+        rules:
+        - alert: FluxCDReconciliationFailed
+          expr: count(gotk_resource_info{customresource_kind=~"Kustomization|HelmRelease", ready="False"}) by (customresource_kind,k8s_cluster_name,exported_namespace,name) > 0
+          for: 1h
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: FluxCD {{ $labels.customresource_kind }}/{{ $labels.name }} in namespace {{ $labels.exported_namespace }} of cluster {{ $labels.k8s_cluster_name }} has failed reconciliation for more than 1 hour
+            summary: FluxCD Reconciliation Failed
+      - name: certificate-alerts
+        rules:
+        - alert: CertificateExpiry
+          expr: (label_join(sum by (k8s_cluster_name,target) (probe_ssl_earliest_cert_expiry{k8s_cluster_name!=""}), "location", "-", "k8s_cluster_name","target") - time())/ 86400 < 45
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Certificate for {{ $labels.target }} in cluster {{ $labels.k8s_cluster_name }} is expiring in less than 45 days
+            summary: Certificate Expiring Soon
+      - name: kubernetes-recording-rules
+        interval: 1m
+        rules:
+        - record: node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate
+          expr: |
+            sum by (k8s_cluster_name,k8s_namespace_name,k8s_pod_name,k8s_container_name,k8s_node_name) (irate(container_cpu_time_seconds_total{}[5m]))
+        - record: node_namespace_pod_container:container_memory_working_set_bytes
+          expr: |
+            sum by (k8s_cluster_name,k8s_namespace_name,k8s_pod_name,k8s_container_name,k8s_node_name) (container_memory_working_set_bytes)
+        - record: node_namespace_pod_container:container_memory_rss_bytes
+          expr: |
+            sum by (k8s_cluster_name,k8s_namespace_name,k8s_pod_name,k8s_container_name,k8s_node_name) (container_memory_rss_bytes)
+        - record: cluster:namespace:pod_memory:active:k8s_container_memory_request_bytes
+          expr: |
+            sum by (k8s_cluster_name, k8s_namespace_name, k8s_pod_name) (k8s_container_memory_request_bytes{})  * on (k8s_cluster_name, k8s_namespace_name,k8s_pod_name) group_left() max by (k8s_cluster_name, k8s_namespace_name,k8s_pod_name) ((k8s_pod_phase{}==2)/2)
+        - record: namespace_memory:k8s_container_memory_request_bytes:sum
+          expr: |
+            sum by (k8s_cluster_name, k8s_namespace_name) (k8s_container_memory_request_bytes{})  * on (k8s_cluster_name, k8s_namespace_name) group_left() max by (k8s_cluster_name, k8s_namespace_name) ((k8s_pod_phase{}==2)/2)
+        - record: cluster:namespace:pod_cpu:active:k8s_container_cpu_request
+          expr: |
+            sum by (k8s_cluster_name, k8s_namespace_name, k8s_pod_name) (k8s_container_cpu_request{})  * on (k8s_cluster_name, k8s_namespace_name,k8s_pod_name) group_left() max by (k8s_cluster_name, k8s_namespace_name,k8s_pod_name) ((k8s_pod_phase{}==2)/2)
+        - record: namespace_cpu:k8s_container_cpu_request:sum
+          expr: |
+            sum by (k8s_cluster_name, k8s_namespace_name) (k8s_container_cpu_request{})  * on (k8s_cluster_name, k8s_namespace_name) group_left() max by (k8s_cluster_name, k8s_namespace_name) ((k8s_pod_phase{}==2)/2)
+        - record: cluster:namespace:pod_memory:active:k8s_container_memory_limit_bytes
+          expr: |
+            sum by (k8s_cluster_name, k8s_namespace_name, k8s_pod_name) (k8s_container_memory_limit_bytes{})  * on (k8s_cluster_name, k8s_namespace_name,k8s_pod_name) group_left() max by (k8s_cluster_name, k8s_namespace_name,k8s_pod_name) ((k8s_pod_phase{}==2)/2)
+        - record: namespace_memory:k8s_container_memory_limit_bytes:sum
+          expr: |
+            sum by (k8s_cluster_name, k8s_namespace_name) (k8s_container_memory_limit_bytes{})  * on (k8s_cluster_name, k8s_namespace_name) group_left() max by (k8s_cluster_name, k8s_namespace_name) ((k8s_pod_phase{}==2)/2)
+        - record: cluster:namespace:pod_cpu:active:k8s_container_cpu_limit
+          expr: |
+            sum by (k8s_cluster_name, k8s_namespace_name, k8s_pod_name) (k8s_container_cpu_limit{})  * on (k8s_cluster_name, k8s_namespace_name,k8s_pod_name) group_left() max by (k8s_cluster_name, k8s_namespace_name,k8s_pod_name) ((k8s_pod_phase{}==2)/2)
+        - record: namespace_cpu:k8s_container_cpu_limit:sum
+          expr: |
+            sum by (k8s_cluster_name, k8s_namespace_name) (k8s_container_cpu_limit{})  * on (k8s_cluster_name, k8s_namespace_name) group_left() max by (k8s_cluster_name, k8s_namespace_name) ((k8s_pod_phase{}==2)/2)
+      - name: os-server-alerts
+        rules:
+        - alert: HighServerCPUUsagePerState
+          expr: avg(system_cpu_utilization_ratio{state!~"idle|wait"}) by (state, host_name, vm_group)  > 0.85
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Server {{ $labels.host_name }} in VM group {{ $labels.vm_group }} in state {{ $labels.state }} has high CPU usage exceeding 85% for more than 5 minutes
+            summary: High CPU Usage on Server
+        - alert: ServerRecentlyRebootedOrCreated
+          expr: system_uptime_seconds{vm_group!=""} < 600
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Server {{ $labels.host_name }} in VM group {{ $labels.vm_group }} has been rebooted or created within the last 10 minutes
+            summary: Server Recently Rebooted or Created
+        - alert: HighServerIOWait
+          expr: avg(system_cpu_utilization_ratio{state="wait"}) by (host_name, vm_group) > 0.05
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Server {{ $labels.host_name }} in VM group {{ $labels.vm_group }} is experiencing high IO wait time exceeding 5% for more than 5 minutes
+            summary: High IO Wait Time on Server
+        - alert: HighServerMemoryUsage
+          expr: system_memory_utilization_ratio{state="used",vm_group!=""} > 0.9
+          for: 8h
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Server {{ $labels.host_name }} in VM group {{ $labels.vm_group }} has high memory usage exceeding 90% for more than 8 hours
+            summary: High Memory Usage on Server
+        - alert: HighServerFileSystemUsage
+          expr: system_filesystem_utilization_ratio{vm_group!="",device!~"C..Users..*|/dev/loop.*"} > 0.9
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: critical
+            team: platform
+            alert_source: ${datacenter}
+          annotations:
+            description: Server {{ $labels.host_name }} in VM group {{ $labels.vm_group }} on {{ $labels.mountpoint }} mountpoint has high file system usage exceeding 90% for more than 5 minutes
+            summary: High File System Usage on Server
+
+serviceMonitor:
+  enabled: true
+
+extraObjects: []

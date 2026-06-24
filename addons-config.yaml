@@ -1,0 +1,142 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: substitute-config
+  namespace: flux-system
+stringData:
+  datacenter: ${dc}
+  tenant: ${tenant}
+  adcsserver: ${adcsserver}
+  registry_host: ${registry_host}
+  splunk_hec_token: ${splunk_hec_token}
+  splunk_access_token: ${splunk_access_token}
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: common-apps
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 60m
+  path: ./common/
+  prune: false
+  wait: true
+  sourceRef:
+    kind: OCIRepository
+    name: k8s-addons-flux
+  postBuild:
+    substituteFrom:
+    - kind: Secret
+      name: substitute-config
+      optional: false
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: common-apps-post-configs
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 60m
+  path: ./common/post-configs/
+  prune: false
+  wait: true
+  sourceRef:
+    kind: OCIRepository
+    name: k8s-addons-flux
+  dependsOn:
+  - name: common-apps
+  postBuild:
+    substituteFrom:
+    - kind: Secret
+      name: substitute-config
+      optional: false
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: common-extras-apps
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 60m
+  path: ./common-extras/
+  prune: false
+  wait: true
+  sourceRef:
+    kind: OCIRepository
+    name: k8s-addons-flux
+  dependsOn:
+  - name: common-apps-post-configs
+  postBuild:
+    substituteFrom:
+    - kind: Secret
+      name: substitute-config
+      optional: false
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: common-extras-apps-post-configs
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 60m
+  path: ./common-extras/post-configs/
+  prune: false
+  wait: true
+  sourceRef:
+    kind: OCIRepository
+    name: k8s-addons-flux
+  dependsOn:
+  - name: common-extras-apps
+  postBuild:
+    substituteFrom:
+    - kind: Secret
+      name: substitute-config
+      optional: false
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: extras-apps
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 60m
+  path: ./extras/
+  prune: false
+  wait: true
+  sourceRef:
+    kind: OCIRepository
+    name: k8s-addons-flux
+  dependsOn:
+  - name: common-extras-apps-post-configs
+  postBuild:
+    substituteFrom:
+    - kind: Secret
+      name: substitute-config
+      optional: false
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: extras-apps-post-configs
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 60m
+  path: ./extras/post-configs/
+  prune: false
+  wait: true
+  sourceRef:
+    kind: OCIRepository
+    name: k8s-addons-flux
+  dependsOn:
+  - name: extras-apps
+  postBuild:
+    substituteFrom:
+    - kind: Secret
+      name: substitute-config
+      optional: false

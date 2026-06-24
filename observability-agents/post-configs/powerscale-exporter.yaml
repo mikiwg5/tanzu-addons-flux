@@ -1,0 +1,94 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: powerscale-exporter-credentials
+  namespace: otel-gateway
+spec:
+  refreshPolicy: OnChange
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: external-secrets-cluster-secret-store
+  target:
+    name: powerscale-exporter-credentials
+    creationPolicy: Owner
+  data:
+  - secretKey: username
+    remoteRef:
+      key: k8s-common/cloud/monitoring/powerscale
+      property: username
+  - secretKey: password
+    remoteRef:
+      key: k8s-common/cloud/monitoring/powerscale
+      property: password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: powerscale-exporter
+  namespace: otel-gateway
+  labels:
+    app: powerscale-exporter
+spec:
+  selector:
+    matchLabels:
+      app: powerscale-exporter
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: powerscale-exporter
+    spec:
+      containers:
+      - name: powerscale-exporter
+        image: ${registry_host}.safaricomet.net/platform/powerscale-exporter:0.28
+        args:
+        - -config-file=/etc/powerscale-exporter/powerscale-exporter-config.toml
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: powerscale-exporter-credentials
+              key: username
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: powerscale-exporter-credentials
+              key: password
+        ports:
+        - containerPort: 9090
+          name: metrics
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/powerscale-exporter
+          readOnly: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: powerscale-exporter-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: powerscale-exporter
+  namespace: otel-gateway
+  labels:
+    app: powerscale-exporter
+spec:
+  selector:
+    app: powerscale-exporter
+  ports:
+  - protocol: TCP
+    port: 9090
+    targetPort: 9090
+  type: ClusterIP
+---
+
+

@@ -1,0 +1,94 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: isilon
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    kyverno.io/exclude-rule: "true"
+spec: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: isilon-certs-0
+  namespace: isilon
+data:
+  cert-0: ""
+type: Opaque
+---
+kind: ExternalSecret
+apiVersion: external-secrets.io/v1
+metadata:
+  name: isilon-creds
+  namespace: isilon
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: external-secrets-cluster-secret-store
+  target:
+    name: isilon-creds
+    creationPolicy: Owner
+  data:
+    - secretKey: config
+      remoteRef:
+        key: k8s-common/isilon
+        property: isilon-creds
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: isilon
+  namespace: isilon
+spec:
+  interval: 1m
+  timeout: 20m
+  chart:
+    spec:
+      chart: container-storage-modules
+      version: 1.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  releaseName: isilon
+  dependsOn:
+    - name: kube-prometheus
+      namespace: kube-prometheus
+  valuesFrom:
+    - kind: ConfigMap
+      name: isilon-values
+  postRenderers:
+    - kustomize:
+        images:
+          - name: quay.io/dell/container-storage-modules/csi-isilon:v2.12.0
+            newName: ${registry_host}.safaricomet.net/platform/container-storage-modules-images
+            digest: sha256:db4c4bee943c6256ccd28138a1ce418cf461a55a74d93768a738f67c0261c34b
+          - name: quay.io/dell/container-storage-modules/csi-metadata-retriever:v1.9.0
+            newName: ${registry_host}.safaricomet.net/platform/container-storage-modules-images
+            digest: sha256:3a8f2f0311b68e7f208ce67c9fd4c52d6fed7a025aa4dd745d7a09c5d0b9168a
+          - name: quay.io/dell/container-storage-modules/dell-csi-replicator:v1.10.0
+            newName: ${registry_host}.safaricomet.net/platform/container-storage-modules-images
+            digest: sha256:013043c3893ce67ffba2d4772dc6ee6bf26a6c857b587d32ae4fc839dd9f9073
+          - name: quay.io/dell/container-storage-modules/dell-replication-controller:v1.10.0
+            newName: ${registry_host}.safaricomet.net/platform/container-storage-modules-images
+            digest: sha256:fd3455285cd0a8771594d7e441da0fdd77e9a843a6b75058a2d1e14326e120dd
+          - name: registry.k8s.io/sig-storage/csi-attacher:v4.7.0
+            newName: ${registry_host}.safaricomet.net/platform/container-storage-modules-images
+            digest: sha256:47ab8aebebdc59316004ba8d51a903637d808f4e62a6d0f599ed3c2483cea901
+          - name: registry.k8s.io/sig-storage/csi-external-health-monitor-controller:v0.13.0
+            newName: ${registry_host}.safaricomet.net/platform/container-storage-modules-images
+            digest: sha256:dda7d9053f91ede34fd9d2f465c84817043e5037aa8ea1a20d2c6875b8fa4a44
+          - name: registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.12.0
+            newName: ${registry_host}.safaricomet.net/platform/container-storage-modules-images
+            digest: sha256:f032a0ca4c699eebe403988a0e217c3dfc82e2cee8b7d9d247a493e5a2425f24
+          - name: registry.k8s.io/sig-storage/csi-provisioner:v5.1.0
+            newName: ${registry_host}.safaricomet.net/platform/container-storage-modules-images
+            digest: sha256:7beede062248204a54ed6813b2d2fb84a99db6d56a824eed483ed1d7965ea6a1
+          - name: registry.k8s.io/sig-storage/csi-resizer:v1.12.0
+            newName: ${registry_host}.safaricomet.net/platform/container-storage-modules-images
+            digest: sha256:706f7cdcccd30ca5f0e94d548e2e0c658f69c0fe4b68a5bf37818a04ca618d3d
+          - name: registry.k8s.io/sig-storage/csi-snapshotter:v8.1.0
+            newName: ${registry_host}.safaricomet.net/platform/container-storage-modules-images
+            digest: sha256:81d32545fb1b2c319bfeb36a70db4b4d3aea9c51c0574b209b8f64750b32d2f0

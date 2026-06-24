@@ -1,0 +1,21 @@
+replicaCount: 3
+extraArgs:
+  envflag.enable: true
+  envflag.prefix: VM_
+  loggerFormat: json
+  httpListenAddr: :8427
+resources:
+  requests:
+    memory: 128Mi
+    cpu: 10m
+  limits:
+    memory: 512Mi
+    cpu: 100m
+serviceMonitor:
+  enabled: true
+config:
+  unauthorized_user:
+    url_prefix:
+    - http://vlc1-victoria-logs-cluster-vlselect:9471/
+    - http://vlc2-victoria-logs-cluster-vlselect:9471/
+    retry_status_codes: [ 500, 502 ]

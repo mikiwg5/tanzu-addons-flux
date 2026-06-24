@@ -1,0 +1,313 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaFolder
+metadata:
+  name: cloud
+  namespace: grafana-operator
+spec:
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  resyncPeriod: 1m
+  title: Cloud
+  uid: cloud
+  permissions: |
+    {
+      "items": [
+        {
+          "role": "Admin",
+          "permission": 4
+        },
+        {
+          "role": "Editor",
+          "permission": 2
+        }
+      ]
+    }
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: avi-controller
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: avi-controller
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: avi-controller-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: avi-pool
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: avi-pool
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: avi-pool-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: avi-service-engine
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: avi-service-engine
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: avi-service-engine-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: avi-virtual-service
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: avi-virtual-service
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: avi-virtual-service-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: nomad-cluster-overview
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: nomad-cluster-overview
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: nomad-cluster-overview-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: vcenter-cluster-status-vrops
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: vcenter-cluster-status-vrops
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: vcenter-cluster-status-vrops-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: vcenter-cluster-status
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: vcenter-cluster-status
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: vcenter-cluster-status-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: vcenter-host-stats
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: vcenter-host-stats
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: vcenter-host-stats-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: vcenter-vm-stats
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: vcenter-vm-stats
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: vcenter-vm-stats-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: vm-details
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: vm-details
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: vm-details-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: vm-details-windows
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: vm-details-windows
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: vm-details-windows-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: ssl-certificate-probe
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: ssl-certificate-probe
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: ssl-certificate-probe-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: http-endpoint-status
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: http-endpoint-status
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: http-endpoint-status-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata: 
+  name: mysql-status
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: mysql-status
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: mysql-status-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata: 
+  name: vcenter-server-appliance-fs-usage
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: vcenter-server-appliance-fs-usage
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: vcenter-server-appliance-fs-usage-dashboard
+    key: json
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata: 
+  name: iis-dashbored
+  namespace: grafana-operator
+  labels:
+    instance: grafana-one
+spec:
+  folderRef: cloud
+  uid: iis-dashbored
+  resyncPeriod: 1m
+  instanceSelector:
+    matchLabels:
+      instance: grafana-one
+  configMapRef:
+    name: iis-dashboard
+    key: json

@@ -1,0 +1,34 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: idrac-exporter
+  namespace: otel-gateway
+spec:
+  interval: 1m
+  timeout: 40m
+  chart:
+    spec:
+      chart: idrac-exporter
+      version: 2.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  releaseName: idrac-exporter
+  dependsOn:
+  - name: kyverno
+    namespace: kyverno
+  - name: kube-prometheus
+    namespace: kube-prometheus
+  - name: victoria-metrics
+    namespace: victoria-metrics
+  valuesFrom:
+  - kind: ConfigMap
+    name: idrac-exporter-values
+  postRenderers:
+  - kustomize:
+      images:
+      - name: mrlhansen/idrac_exporter:2.2.0
+        newName: ${registry_host}.safaricomet.net/platform/idrac-exporter-images
+        digest: sha256:26a295c470f41e997bdae64092887f90627eb06e97dbcf7bf620833083e6c9ee

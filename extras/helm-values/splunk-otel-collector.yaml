@@ -1,0 +1,637 @@
+agent:
+  controlPlaneMetrics:
+    apiserver:
+      enabled: false
+    controllerManager:
+      enabled: false
+    coredns:
+      enabled: false
+    proxy:
+      enabled: false
+    scheduler:
+      enabled: false
+  maxUnavailable: 30%
+  featureGates: confmap.enableMergeAppendOption
+  config:
+    exporters:
+      otlp/mdc1-prod:
+        endpoint: grpc.mdc1-otel-gateway.safaricomet.net:443
+        write_buffer_size: 10485760
+        timeout: 60s
+        auth:
+          authenticator: bearertokenauth
+        tls:
+          insecure_skip_verify: true
+      otlp/mdc2-prod:
+        endpoint: grpc.mdc2-otel-gateway.safaricomet.net:443
+        write_buffer_size: 10485760
+        timeout: 60s
+        auth:
+          authenticator: bearertokenauth
+        tls:
+          insecure_skip_verify: true
+      debug:
+        verbosity: detailed
+    processors:
+      transform/parse_envoy_json_body:
+        error_mode: ignore
+        log_statements:
+        - context: log
+          conditions:
+          - resource.attributes["k8s.namespace.name"] == "contour" and resource.attributes["k8s.container.name"] == "envoy" and IsMatch(body, "^\\{")
+          statements:
+          - merge_maps(attributes, ParseJSON(body), "upsert")
+      filter/droptrace:
+        error_mode: ignore
+        traces:
+          span:
+          - attributes["thread.name"] == "registrationTask1"
+          - IsMatch(attributes["http.route"], "/actuator.*")
+          - IsMatch(attributes["http.route"], "/swagger-ui.*")
+          - IsMatch(attributes["http.route"], "/v3/api-docs.*")
+      filter/dropmetrics:
+        error_mode: ignore
+        metrics:
+          metric:
+          - HasAttrOnDatapoint("http.route", "/actuator")
+          - HasAttrOnDatapoint("http.route", "/actuator/info")
+          - HasAttrOnDatapoint("http.route", "/actuator/health")
+      filter/audit-log:
+        error_mode: ignore
+        logs:
+          log_record:
+          - not IsMatch(body, "impersonatedUser")
+      filter/debug-log:
+        error_mode: ignore
+        logs:
+          log_record:
+          - IsMatch(body, "DEBUG") or IsMatch(body, "TRACE")
+      k8sattributes/service-logs:
+        extract:
+          metadata:
+          - k8s.deployment.name
+          - k8s.daemonset.name
+          - k8s.statefulset.name
+        pod_association:
+        - sources:
+          - from: resource_attribute
+            name: k8s.pod.uid
+        - sources:
+          - from: resource_attribute
+            name: k8s.pod.ip
+      resource/service-logs:
+        attributes:
+        - action: upsert
+          from_attribute: k8s.deployment.name
+          key: service.name
+        - action: upsert
+          from_attribute: k8s.daemonset.name
+          key: service.name
+        - action: upsert
+          from_attribute: k8s.statefulset.name
+          key: service.name
+        - action: delete
+          key: k8s.deployment.name
+        - action: delete
+          key: k8s.daemonset.name
+        - action: delete
+          key: k8s.statefulset.name
+      resourcedetection:
+        detectors:
+        - env
+        - system
+        override: true
+        system:
+          hostname_sources:
+          - os
+          resource_attributes:
+            os.description:
+              enabled: true
+            os.type:
+              enabled: true
+        timeout: 15s
+      memory_limiter:
+        check_interval: 2s
+        limit_mib: 2048
+      resource/duplicate_metrics_labels:
+        attributes:
+        - action: delete
+          key: container
+        - action: delete
+          key: namespace
+        - action: delete
+          key: host.name
+        - action: delete
+          key: pod
+        - action: delete
+          key: server.address
+        - action: delete
+          key: server.port
+        - action: delete
+          key: url.scheme
+    receivers:
+      prometheus/agent:
+        config:
+          scrape_configs:
+          - job_name: otel-agent
+            scrape_interval: 20s
+            static_configs:
+            - targets:
+              - localhost:8889
+      prometheus/ta:
+        config:
+          global:
+            scrape_interval: 60s
+        target_allocator:
+          collector_id: $${env:K8S_POD_NAME}
+          endpoint: http://splunk-otel-collector-ta.splunk.svc.cluster.local:80
+          interval: 60s
+      hostmetrics:
+        collection_interval: 20s
+        root_path: /hostroot
+        scrapers:
+          cpu:
+            metrics:
+              system.cpu.frequency:
+                enabled: true
+              system.cpu.logical.count:
+                enabled: true
+              system.cpu.utilization:
+                enabled: true
+              system.cpu.physical.count:
+                enabled: true
+          disk: null
+          filesystem:
+            include_mount_points:
+              match_type: strict
+              mount_points:
+              - /
+              - /var/lib/containerd
+              - /var/lib/kubelet
+            include_fs_types:
+              match_type: strict
+              fs_types:
+              - ext4
+            metrics:
+              system.filesystem.utilization:
+                enabled: true
+          load: null
+          memory:
+            metrics:
+              system.memory.limit:
+                enabled: true
+              system.memory.utilization:
+                enabled: true
+              system.linux.memory.available:
+                enabled: true
+          network:
+            metrics:
+              system.network.conntrack.count:
+                enabled: true
+              system.network.conntrack.max:
+                enabled: true
+          paging: null
+          processes: null
+          system:
+            metrics:
+              system.uptime:
+                enabled: true
+      kubeletstats:
+        auth_type: serviceAccount
+        collection_interval: 20s
+        endpoint: $${K8S_NODE_IP}:10250
+        extra_metadata_labels:
+        - container.id
+        - k8s.volume.type
+        insecure_skip_verify: true
+        k8s_api_config:
+          auth_type: serviceAccount
+        metric_groups:
+        - container
+        - pod
+        - node
+        - volume
+        metrics:
+          container.uptime:
+            enabled: true
+          k8s.container.cpu.node.utilization:
+            enabled: true
+          k8s.container.cpu_limit_utilization:
+            enabled: true
+          k8s.container.cpu_request_utilization:
+            enabled: true
+          k8s.container.memory_limit_utilization:
+            enabled: true
+          k8s.container.memory_request_utilization:
+            enabled: true
+          k8s.node.cpu.usage:
+            enabled: true
+          k8s.node.uptime:
+            enabled: true
+          k8s.pod.cpu.node.utilization:
+            enabled: true
+          k8s.pod.cpu.usage:
+            enabled: true
+          k8s.pod.cpu_limit_utilization:
+            enabled: true
+          k8s.pod.cpu_request_utilization:
+            enabled: true
+          k8s.pod.memory_limit_utilization:
+            enabled: true
+          k8s.pod.memory_request_utilization:
+            enabled: true
+          k8s.pod.uptime:
+            enabled: true
+        node: $${K8S_NODE_NAME}
+    service:
+      pipelines:
+        logs:
+          exporters:
+          # Only being sent to otel-gateway to reduce load on splunk
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - k8sattributes
+          - k8sattributes/service-logs
+          - filter/logs
+          - filter/debug-log
+          - batch
+          - resourcedetection
+          - resource
+          - resource/logs
+          - resource/service-logs
+          - resource/add_environment
+          - transform/parse_envoy_json_body
+          receivers:
+          - filelog
+          - otlp
+        logs/host:
+          exporters:
+          - splunk_hec/platform_logs
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - batch
+          - resource
+          - resource/add_environment
+          receivers:
+          - journald/kubelet
+          - journald/docker
+          - journald/containerd
+        logs/audit-log:
+          exporters:
+          - splunk_hec/platform_logs
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - filter/audit-log
+          - batch
+          - resource
+          receivers:
+          - filelog/audit-log
+        metrics:
+          exporters:
+          - splunk_hec/platform_metrics
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - batch
+          - resourcedetection
+          - resource
+          - resource/duplicate_metrics_labels
+          - filter/dropmetrics
+          receivers:
+          - hostmetrics
+          - kubeletstats
+          - otlp
+        metrics/ta:
+          ## Only being sent to otel-gateway (will cause splunk to misbehave)
+          exporters:
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - batch
+          - resourcedetection
+          - resource
+          receivers:
+          - prometheus/ta
+        metrics/agent:
+          exporters:
+          - splunk_hec/platform_metrics
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - batch
+          - resource/add_agent_k8s
+          - resourcedetection
+          - resource
+          - k8sattributes/metrics
+          receivers:
+          - prometheus/agent
+        traces:
+          exporters:
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - k8sattributes
+          - batch
+          - resourcedetection
+          - resource
+          - filter/droptrace
+          - resource/add_environment
+          receivers:
+          - otlp
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 8Gi
+  extraVolumes:
+  - hostPath:
+      path: /
+      type: ""
+    name: host-root
+  - configMap:
+      items:
+      - key: ca-certificates.crt
+        path: ca-certificates.crt
+      name: safaricomet.net
+    name: etc-ssl-certs
+  - name: bearertokens
+    secret:
+      secretName: bearertokens
+  - name: extra-config
+    configMap:
+      name: splunk-otel-collector-extra-config
+  extraVolumeMounts:
+  - name: host-root
+    mountPath: /hostroot
+  - name: extra-config
+    mountPath: /extra
+  - name: etc-ssl-certs
+    mountPath: /etc/ssl/certs
+  - name: bearertokens
+    mountPath: /secrets/bearertokens
+clusterName: ${datacenter}-${tenant}-tkc
+clusterReceiver:
+  featureGates: confmap.enableMergeAppendOption
+  config:
+    exporters:
+      otlp/mdc1-prod:
+        endpoint: grpc.mdc1-otel-gateway.safaricomet.net:443
+        write_buffer_size: 10485760
+        timeout: 60s
+        auth:
+          authenticator: bearertokenauth
+        tls:
+          insecure_skip_verify: true
+      otlp/mdc2-prod:
+        endpoint: grpc.mdc2-otel-gateway.safaricomet.net:443
+        write_buffer_size: 10485760
+        timeout: 60s
+        auth:
+          authenticator: bearertokenauth
+        tls:
+          insecure_skip_verify: true
+    processors:
+      filter/k8sobjects:
+        error_mode: ignore
+        logs:
+          log_record:
+          - IsMatch(body, "PolicyViolation")
+      resourcedetection:
+        detectors:
+        - env
+        - system
+        override: true
+        system:
+          hostname_sources:
+          - os
+          resource_attributes:
+            os.description:
+              enabled: true
+            os.type:
+              enabled: true
+        timeout: 15s
+      memory_limiter:
+        check_interval: 2s
+        limit_mib: 2048
+    receivers:
+      prometheus/k8s_cluster_receiver:
+        config:
+          scrape_configs:
+          - job_name: otel-k8s-cluster-receiver
+            scrape_interval: 20s
+            static_configs:
+            - targets:
+              - localhost:8899
+      k8sobjects:
+        auth_type: serviceAccount
+        objects:
+        - name: events
+          mode: watch
+      k8s_cluster:
+        auth_type: serviceAccount
+        collection_interval: 20s
+        metrics:
+          k8s.pod.status_reason:
+            enabled: true
+          k8s.node.condition:
+            enabled: true
+        resource_attributes:
+          container.runtime:
+            enabled: true
+          container.runtime.version:
+            enabled: true
+          k8s.container.status.last_terminated_reason:
+            enabled: true
+          k8s.kubelet.version:
+            enabled: true
+          os.description:
+            enabled: true
+          os.type:
+            enabled: true
+        node_conditions_to_report:
+        - Ready
+        - DiskPressure
+        - MemoryPressure
+        - PIDPressure
+        allocatable_types_to_report:
+        - cpu
+        - memory
+        - ephemeral-storage
+        - storage
+    service:
+      pipelines:
+        logs:
+          exporters:
+          - splunk_hec/platform_logs
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - batch
+          - attributes/drop_event_attrs
+          - resourcedetection
+          - resource
+          receivers:
+          - k8s_events
+        logs/k8sobjects:
+          exporters:
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - filter/k8sobjects
+          - batch
+          - attributes/drop_event_attrs
+          - resourcedetection
+          - resource
+          receivers:
+          - k8sobjects
+        metrics:
+          exporters:
+          - splunk_hec/platform_metrics
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - batch
+          - resource
+          - resource/k8s_cluster
+          receivers:
+          - k8s_cluster
+        metrics/collector:
+          exporters:
+          - splunk_hec/platform_metrics
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+          processors:
+          - memory_limiter
+          - batch
+          - resource/add_collector_k8s
+          - resourcedetection
+          - resource
+          - k8sattributes/metrics
+          receivers:
+          - prometheus/k8s_cluster_receiver
+  enabled: true
+  eventsEnabled: true
+  extraVolumes:
+  - configMap:
+      items:
+      - key: ca-certificates.crt
+        path: ca-certificates.crt
+      name: safaricomet.net
+    name: etc-ssl-certs
+  - name: bearertokens
+    secret:
+      secretName: bearertokens
+  - name: extra-config
+    configMap:
+      name: splunk-otel-collector-cluster-receiver-extra-config
+  extraVolumeMounts:
+  - name: extra-config
+    mountPath: /extra
+  - name: etc-ssl-certs
+    mountPath: /etc/ssl/certs
+  - name: bearertokens
+    mountPath: /secrets/bearertokens
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 1000m
+      memory: 4Gi
+logsCollection:
+  extraFileLogs:
+    filelog/audit-log:
+      include:
+      - /var/log/kubernetes/kube-apiserver.log
+      include_file_name: false
+      include_file_path: true
+      resource:
+        com.splunk.source: /var/log/kubernetes/kube-apiserver.log
+        com.splunk.sourcetype: kube:apiserver-audit
+        host.name: EXPR(env("K8S_NODE_NAME"))
+        service.name: kube:apiserver-audit
+      start_at: beginning
+      operators:
+      - type: json_parser
+  containers:
+    containerRuntime: containerd
+    multilineConfigs:
+    - namespaceName:
+        value: .*
+        useRegexp: true
+      firstEntryRegex: ^[^\s].*
+  journald:
+    enabled: true
+    directory: /var/log/journal
+splunkPlatform:
+  endpoint: https://splunk_collector1.safaricomet.net:8088/services/collector/event
+  index: mdc_${tenant}_logs
+  insecureSkipVerify: true
+  metricsEnabled: true
+  metricsIndex: mdc_${tenant}_metrics
+  tracesEnabled: false
+  tracesIndex: mdc_${tenant}_logs
+  sendingQueue:
+    persistentQueue:
+      enabled: false
+  token: ${splunk_hec_token}
+targetAllocator:
+  enabled: true
+  config:
+    prometheus_cr:
+      enabled: true
+      scrape_interval: 60s
+      pod_monitor_selector: {}
+      service_monitor_selector:
+        matchExpressions:
+        - key: app
+          operator: NotIn
+          values:
+          - nifi
+environment: prod
+operatorcrds:
+  install: true
+operator:
+  enabled: true
+  admissionWebhooks:
+    create: true
+    certManager:
+      enabled: true
+      certificateAnnotations:
+        "helm.sh/hook": pre-install,pre-upgrade
+        "helm.sh/hook-weight": "1"
+      issuerRef:
+        kind: ClusterIssuer
+        name: selfsigned
+  manager:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 1Gi
+instrumentation:
+  spec:
+    propagators:
+    - tracecontext
+    - baggage
+    - b3
+    - jaeger
+    sampler:
+      type: traceidratio
+      argument: "1"
+featureGates:
+  fixMissedLogsDuringLogRotation: true

@@ -1,0 +1,33 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: trust-manager
+  namespace: cert-manager
+spec:
+  interval: 1m
+  timeout: 20m
+  chart:
+    spec:
+      chart: trust-manager
+      version: v0.12.0
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  releaseName: trust-manager
+  dependsOn:
+  - name: cert-manager
+    namespace: cert-manager
+  valuesFrom:
+  - kind: ConfigMap
+    name: trust-manager-values
+  postRenderers:
+  - kustomize:
+      images:
+      - name: quay.io/jetstack/cert-manager-package-debian:20210119.0
+        newName: ${registry_host}.safaricomet.net/platform/trust-manager-images
+        digest: sha256:b38f8443f651f2a1ccd233dfe2bb16932b8b13107fd5ba0878179c11156495ec
+      - name: quay.io/jetstack/trust-manager:v0.12.0
+        newName: ${registry_host}.safaricomet.net/platform/trust-manager-images
+        digest: sha256:36062665587556ecfab32ef430544bde9e251d15bacbe7dd23b1680026f69f8a

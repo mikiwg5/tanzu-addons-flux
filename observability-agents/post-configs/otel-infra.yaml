@@ -1,0 +1,507 @@
+kind: ExternalSecret
+apiVersion: external-secrets.io/v1
+metadata:
+  name: monitoring-cred
+  namespace: otel-gateway
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: external-secrets-cluster-secret-store
+  target:
+    name: monitoring-cred
+    creationPolicy: Owner
+  data:
+  - secretKey: username
+    remoteRef:
+      key: k8s-common/cloud/monitoring/infra-components
+      property: username
+  - secretKey: password
+    remoteRef:
+      key: k8s-common/cloud/monitoring/infra-components
+      property: password
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-infra
+  namespace: otel-gateway
+spec:
+  mode: statefulset
+  managementState: managed
+  replicas: 2
+  config:
+    receivers:
+      vcenter/${datacenter}-itm:
+        endpoint: https://${datacenter}-itm-vc01.safaricomet.net
+        username: $${env:MONITORING_USER}
+        password: $${env:MONITORING_PASSWORD}
+        collection_interval: 2m
+        metrics:
+          vcenter.host.memory.capacity:
+            enabled: true
+          vcenter.vm.cpu.time:
+            enabled: true
+          vcenter.vm.memory.granted:
+            enabled: true
+        tls:
+          insecure_skip_verify: true
+          insecure: false
+      vcenter/${datacenter}-wlg:
+        endpoint: https://${datacenter}-wlg-vc01.safaricomet.net
+        username: $${env:MONITORING_USER}
+        password: $${env:MONITORING_PASSWORD}
+        collection_interval: 2m
+        metrics:
+          vcenter.host.memory.capacity:
+            enabled: true
+          vcenter.vm.cpu.time:
+            enabled: true
+          vcenter.vm.memory.granted:
+            enabled: true
+        tls:
+          insecure_skip_verify: true
+          insecure: false
+      vcenter/${datacenter}-wlt:
+        endpoint: https://${datacenter}-wlt-vc01.safaricomet.net
+        username: $${env:MONITORING_USER}
+        password: $${env:MONITORING_PASSWORD}
+        collection_interval: 2m
+        metrics:
+          vcenter.host.memory.capacity:
+            enabled: true
+          vcenter.vm.cpu.time:
+            enabled: true
+          vcenter.vm.memory.granted:
+            enabled: true
+        tls:
+          insecure_skip_verify: true
+          insecure: false
+      vcenter/${datacenter}-tcpm:
+        endpoint: https://${datacenter}-tcpm-vc01.safaricomet.net
+        username: $${env:MONITORING_USER}
+        password: $${env:MONITORING_PASSWORD}
+        collection_interval: 2m
+        metrics:
+          vcenter.host.memory.capacity:
+            enabled: true
+          vcenter.vm.cpu.time:
+            enabled: true
+          vcenter.vm.memory.granted:
+            enabled: true
+        tls:
+          insecure_skip_verify: true
+          insecure: false
+      vcenter/${datacenter}-tcpc:
+        endpoint: https://${datacenter}-tcpc-vc01.safaricomet.net
+        username: $${env:MONITORING_USER}
+        password: $${env:MONITORING_PASSWORD}
+        collection_interval: 2m
+        metrics:
+          vcenter.host.memory.capacity:
+            enabled: true
+          vcenter.vm.cpu.time:
+            enabled: true
+          vcenter.vm.memory.granted:
+            enabled: true
+        tls:
+          insecure_skip_verify: true
+          insecure: false
+      prometheus/powermax:
+        config:
+          scrape_configs:
+          - job_name: powermax
+            honor_timestamps: true
+            scrape_interval: 1m
+            scrape_timeout: 50s
+            metrics_path: /metrics
+            scheme: http
+            static_configs:
+            - targets:
+              - pmax-exporter.otel-gateway.svc.cluster.local:8080
+      influxdb/powerscale:
+        endpoint: 0.0.0.0:8086
+      prometheus/agent:
+        config:
+          scrape_configs:
+          - job_name: otel-agent
+            scrape_interval: 10s
+            static_configs:
+            - targets:
+              - 0.0.0.0:8889
+      prometheus/avi-api-proxy-prod:
+        config:
+          scrape_configs:
+          - job_name: avi_api_vs
+            honor_timestamps: true
+            params:
+              tenant:
+              - admin
+            scrape_interval: 1m
+            scrape_timeout: 45s
+            metrics_path: /api/analytics/prometheus-metrics/virtualservice
+            scheme: http
+            follow_redirects: true
+            metric_relabel_configs:
+            - source_labels: [ instance ]
+              separator: ;
+              regex: (.*)
+              target_label: instance
+              replacement: ${datacenter}-tcp-avi
+              action: replace
+            static_configs:
+            - targets:
+              - avi-api-proxy-prod.otel-gateway.svc:8080
+          - job_name: avi_api_se
+            honor_timestamps: true
+            params:
+              tenant:
+              - admin
+            scrape_interval: 1m
+            scrape_timeout: 45s
+            metrics_path: /api/analytics/prometheus-metrics/serviceengine
+            scheme: http
+            follow_redirects: true
+            metric_relabel_configs:
+            - source_labels: [ instance ]
+              separator: ;
+              regex: (.*)
+              target_label: instance
+              replacement: ${datacenter}-tcp-avi
+              action: replace
+            static_configs:
+            - targets:
+              - avi-api-proxy-prod.otel-gateway.svc:8080
+          - job_name: avi_api_pool
+            honor_timestamps: true
+            params:
+              tenant:
+              - admin
+            scrape_interval: 1m
+            scrape_timeout: 45s
+            metrics_path: /api/analytics/prometheus-metrics/pool
+            scheme: http
+            follow_redirects: true
+            metric_relabel_configs:
+            - source_labels: [ instance ]
+              separator: ;
+              regex: (.*)
+              target_label: instance
+              replacement: ${datacenter}-tcp-avi
+              action: replace
+            static_configs:
+            - targets:
+              - avi-api-proxy-prod.otel-gateway.svc:8080
+          - job_name: avi_api_controller
+            honor_timestamps: true
+            scrape_interval: 1m
+            scrape_timeout: 45s
+            metrics_path: /api/analytics/prometheus-metrics/controller
+            scheme: http
+            follow_redirects: true
+            metric_relabel_configs:
+            - source_labels: [ instance ]
+              separator: ;
+              regex: (.*)
+              target_label: instance
+              replacement: ${datacenter}-tcp-avi
+              action: replace
+            static_configs:
+            - targets:
+              - avi-api-proxy-prod.otel-gateway.svc:8080
+
+    processors:
+      batch:
+        send_batch_max_size: 8192
+      memory_limiter:
+        check_interval: 2s
+        limit_mib: 750
+      resourcedetection:
+        detectors:
+        - env
+        - system
+        override: true
+        system:
+          hostname_sources:
+          - os
+        timeout: 15s
+      resource/add_agent_k8s:
+        attributes:
+        - action: insert
+          key: k8s.pod.name
+          value: $${K8S_POD_NAME}
+        - action: insert
+          key: k8s.pod.uid
+          value: $${K8S_POD_UID}
+        - action: insert
+          key: k8s.namespace.name
+          value: $${K8S_NAMESPACE}
+      resource:
+        attributes:
+        - action: insert
+          key: k8s.node.name
+          value: $${K8S_NODE_NAME}
+        - action: upsert
+          key: k8s.cluster.name
+          value: ${datacenter}-${tenant}-tkc
+      k8sattributes/metrics:
+        extract:
+          annotations:
+          - from: pod
+            key: splunk.com/sourcetype
+          - from: namespace
+            key: splunk.com/metricsIndex
+            tag_name: com.splunk.index
+          - from: pod
+            key: splunk.com/metricsIndex
+            tag_name: com.splunk.index
+          metadata: []
+        filter:
+          node_from_env_var: K8S_NODE_NAME
+        pod_association:
+        - sources:
+          - from: resource_attribute
+            name: k8s.node.name
+        - sources:
+          - from: resource_attribute
+            name: k8s.pod.uid
+        - sources:
+          - from: resource_attribute
+            name: k8s.pod.ip
+        - sources:
+          - from: resource_attribute
+            name: ip
+        - sources:
+          - from: connection
+
+    extensions:
+      k8s_leader_elector:
+        auth_type: serviceAccount
+        lease_name: otel-infra-collector-leader-election
+        lease_namespace: otel-gateway
+      bearertokenauth:
+        filename: /secrets/bearertokens/tokens
+      file_storage/persistent_queue:
+        directory: /otel-persistent-queue
+        create_directory: true
+        compaction:
+          on_rebound: true
+          directory: /otel-persistent-queue/tmp/
+          rebound_needed_threshold_mib: 1000
+          rebound_trigger_threshold_mib: 100
+          check_interval: 30s
+    exporters:
+      otlp/mdc1-prod:
+        endpoint: grpc.mdc1-otel-gateway.safaricomet.net:443
+        write_buffer_size: 10485760
+        timeout: 60s
+        auth:
+          authenticator: bearertokenauth
+        tls:
+          insecure_skip_verify: true
+        sending_queue:
+          enabled: true
+          storage: file_storage/persistent_queue
+      otlp/mdc2-prod:
+        endpoint: grpc.mdc2-otel-gateway.safaricomet.net:443
+        write_buffer_size: 10485760
+        timeout: 60s
+        auth:
+          authenticator: bearertokenauth
+        tls:
+          insecure_skip_verify: true
+        sending_queue:
+          enabled: true
+          storage: file_storage/persistent_queue
+      debug:
+        verbosity: detailed
+
+    service:
+      extensions:
+      - k8s_leader_elector
+      - bearertokenauth
+      - file_storage/persistent_queue
+      pipelines:
+        metrics:
+          receivers:
+          - vcenter/${datacenter}-itm
+          - vcenter/${datacenter}-wlg
+          - vcenter/${datacenter}-wlt
+          - vcenter/${datacenter}-tcpm
+          - vcenter/${datacenter}-tcpc
+          processors:
+          - memory_limiter
+          - batch
+          exporters:
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+        metrics/agent:
+          receivers:
+          - prometheus/agent
+          processors:
+          - memory_limiter
+          - batch
+          - resource/add_agent_k8s
+          - resourcedetection
+          - resource
+          exporters:
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+        metrics/powermax:
+          receivers:
+          - prometheus/powermax
+          processors:
+          - memory_limiter
+          - batch
+          exporters:
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+        metrics/powerscale:
+          receivers:
+          - influxdb/powerscale
+          processors:
+          - memory_limiter
+          - batch
+          exporters:
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+        metrics/avi-api-proxy-prod:
+          receivers:
+          - prometheus/avi-api-proxy-prod
+          processors:
+          - memory_limiter
+          - batch
+          exporters:
+          - otlp/mdc1-prod
+          - otlp/mdc2-prod
+      telemetry:
+        metrics:
+          readers:
+          - pull:
+              exporter:
+                prometheus:
+                  host: '0.0.0.0'
+                  port: 8889
+  image: ${registry_host}.safaricomet.net/platform/opentelemetry-collector-contrib:0.138.0
+  volumes:
+  - configMap:
+      items:
+      - key: ca-certificates.crt
+        path: ca-certificates.crt
+      name: safaricomet.net
+    name: etc-ssl-certs
+  - name: bearertokens
+    secret:
+      secretName: bearertokens
+  env:
+  - name: MONITORING_USER
+    valueFrom:
+      secretKeyRef:
+        name: monitoring-cred
+        key: username
+  - name: MONITORING_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: monitoring-cred
+        key: password
+  - name: K8S_NODE_NAME
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: spec.nodeName
+  - name: K8S_NODE_IP
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: status.hostIP
+  - name: K8S_POD_IP
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: status.podIP
+  - name: K8S_POD_NAME
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: metadata.name
+  - name: K8S_POD_UID
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: metadata.uid
+  - name: K8S_NAMESPACE
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: metadata.namespace
+  securityContext:
+    runAsUser: 0
+    runAsGroup: 0
+  resources:
+    limits:
+      cpu: 800m
+      memory: 1.5Gi
+    requests:
+      cpu: 200m
+      memory: 800Mi
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/component: opentelemetry-collector
+            app.kubernetes.io/instance: otel-gateway.otel-infra
+        topologyKey: kubernetes.io/hostname
+  targetAllocator:
+    enabled: false
+  volumeClaimTemplates:
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      name: persistent-queue
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 50Gi
+  volumeMounts:
+  - name: persistent-queue
+    mountPath: /otel-persistent-queue
+  - name: etc-ssl-certs
+    mountPath: /etc/ssl/certs
+  - name: bearertokens
+    mountPath: /secrets/bearertokens
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: leader-election-role
+  namespace: otel-gateway
+rules:
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: leader-election-role-binding
+  namespace: otel-gateway
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: otel-infra-collector
+  namespace: otel-gateway

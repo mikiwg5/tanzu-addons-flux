@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tempo
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    kyverno.io/exclude-rule: "true"
+spec: {}
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: tempo
+  namespace: tempo
+spec:
+  interval: 1m
+  timeout: 40m
+  chart:
+    spec:
+      chart: tempo-distributed
+      version: 1.61.2
+      sourceRef:
+        kind: HelmRepository
+        name: local-harbor-helm-repo
+        namespace: flux-system
+      interval: 5m
+  releaseName: tempo
+  dependsOn:
+  - name: kyverno
+    namespace: kyverno
+  - name: kube-prometheus
+    namespace: kube-prometheus
+  - name: victoria-metrics
+    namespace: victoria-metrics
+  valuesFrom:
+  - kind: ConfigMap
+    name: tempo-values
+  postRenderers:
+  - kustomize:
+      images:
+      - name: docker.io/grafana/tempo-query:2.9.0
+        newName: ${registry_host}.safaricomet.net/platform/tempo-distributed-images
+        digest: sha256:6d1f21c5d2ca33a96524a408a5d5b4162a3a319ba5170a46ee0c5ecf5802ab27
+      - name: docker.io/grafana/tempo:2.9.0
+        newName: ${registry_host}.safaricomet.net/platform/tempo-distributed-images
+        digest: sha256:b025a4a4db0a58cc94e2abfab59751f92d74ab8cc024d2e6025ba7efb87bbaff
+      - name: docker.io/memcached:1.6.39-alpine
+        newName: ${registry_host}.safaricomet.net/platform/tempo-distributed-images
+        digest: sha256:aac456c35cd29635b5501fefac58a2e954752006c9d159fbf520dd785e09cbba
+      - name: docker.io/prom/memcached-exporter:v0.15.3
+        newName: ${registry_host}.safaricomet.net/platform/tempo-distributed-images
+        digest: sha256:2d3785a0ddb28c083298261c2a989ea108435078234e005fc6e3ec8f313f5a3b

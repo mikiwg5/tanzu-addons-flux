@@ -1,0 +1,88 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: k8s-apiserver
+  namespace: kube-prometheus
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    port: https
+    scheme: https
+    interval: 60s
+    tlsConfig:
+      caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      insecureSkipVerify: true
+      serverName: kubernetes
+    metricRelabelings:
+    - action: drop
+      regex: apiserver_request_duration_seconds_bucket
+      sourceLabels: [ __name__ ]
+    - action: drop
+      regex: apiserver_request_sli_duration_seconds_bucket
+      sourceLabels: [ __name__ ]
+    - action: drop
+      regex: workqueue_queue_duration_seconds_bucket
+      sourceLabels: [ __name__ ]
+    - action: drop
+      regex: etcd_request_duration_seconds_bucket
+      sourceLabels: [ __name__ ]
+    - action: drop
+      regex: apiserver_response_sizes_bucket
+      sourceLabels: [ __name__ ]
+    - action: drop
+      regex: apiserver_watch_events_sizes_bucket
+      sourceLabels: [ __name__ ]
+    - action: drop
+      regex: workqueue_work_duration_seconds_bucket
+      sourceLabels: [ __name__ ]
+  jobLabel: component
+  namespaceSelector:
+    matchNames:
+    - kube-system
+  selector:
+    matchLabels:
+      component: apiserver
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: k8s-antrea-controller
+  namespace: kube-prometheus
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    port: api
+    scheme: https
+    interval: 60s
+    tlsConfig:
+      caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      insecureSkipVerify: true
+  jobLabel: component
+  namespaceSelector:
+    matchNames:
+    - kube-system
+  selector:
+    matchLabels:
+      component: antrea-controller
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: k8s-antrea-agent
+  namespace: kube-prometheus
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    port: api
+    scheme: https
+    interval: 60s
+    tlsConfig:
+      caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+      insecureSkipVerify: true
+  jobLabel: component
+  namespaceSelector:
+    matchNames:
+    - kube-system
+  selector:
+    matchLabels:
+      component: antrea-agent
