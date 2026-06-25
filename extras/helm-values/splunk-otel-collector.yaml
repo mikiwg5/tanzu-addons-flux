@@ -14,24 +14,14 @@ agent:
   featureGates: confmap.enableMergeAppendOption
   config:
     exporters:
-      otlp/mdc1-prod:
-        endpoint: grpc.mdc1-otel-gateway.safaricomet.net:443
+      otlp/mdc1:
+        endpoint: ${mdc1_gateway_ip}:443   # mdc1 only — mdc2 removed for test
         write_buffer_size: 10485760
         timeout: 60s
-        auth:
-          authenticator: bearertokenauth
-        tls:
-          insecure_skip_verify: true
-      otlp/mdc2-prod:
-        endpoint: grpc.mdc2-otel-gateway.safaricomet.net:443
-        write_buffer_size: 10485760
-        timeout: 60s
-        auth:
-          authenticator: bearertokenauth
         tls:
           insecure_skip_verify: true
       debug:
-        verbosity: detailed
+        verbosity: basic
     processors:
       transform/parse_envoy_json_body:
         error_mode: ignore
@@ -247,9 +237,7 @@ agent:
       pipelines:
         logs:
           exporters:
-          # Only being sent to otel-gateway to reduce load on splunk
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - k8sattributes
@@ -268,9 +256,7 @@ agent:
           - otlp
         logs/host:
           exporters:
-          - splunk_hec/platform_logs
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - batch
@@ -282,9 +268,7 @@ agent:
           - journald/containerd
         logs/audit-log:
           exporters:
-          - splunk_hec/platform_logs
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - filter/audit-log
@@ -294,9 +278,7 @@ agent:
           - filelog/audit-log
         metrics:
           exporters:
-          - splunk_hec/platform_metrics
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - batch
@@ -309,10 +291,8 @@ agent:
           - kubeletstats
           - otlp
         metrics/ta:
-          ## Only being sent to otel-gateway (will cause splunk to misbehave)
           exporters:
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - batch
@@ -322,9 +302,7 @@ agent:
           - prometheus/ta
         metrics/agent:
           exporters:
-          - splunk_hec/platform_metrics
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - batch
@@ -336,8 +314,7 @@ agent:
           - prometheus/agent
         traces:
           exporters:
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - k8sattributes
@@ -360,15 +337,6 @@ agent:
       path: /
       type: ""
     name: host-root
-  - configMap:
-      items:
-      - key: ca-certificates.crt
-        path: ca-certificates.crt
-      name: safaricomet.net
-    name: etc-ssl-certs
-  - name: bearertokens
-    secret:
-      secretName: bearertokens
   - name: extra-config
     configMap:
       name: splunk-otel-collector-extra-config
@@ -377,31 +345,19 @@ agent:
     mountPath: /hostroot
   - name: extra-config
     mountPath: /extra
-  - name: etc-ssl-certs
-    mountPath: /etc/ssl/certs
-  - name: bearertokens
-    mountPath: /secrets/bearertokens
 clusterName: ${datacenter}-${tenant}-tkc
 clusterReceiver:
   featureGates: confmap.enableMergeAppendOption
   config:
     exporters:
-      otlp/mdc1-prod:
-        endpoint: grpc.mdc1-otel-gateway.safaricomet.net:443
+      otlp/mdc1:
+        endpoint: ${mdc1_gateway_ip}:443   # mdc1 only — mdc2 removed for test
         write_buffer_size: 10485760
         timeout: 60s
-        auth:
-          authenticator: bearertokenauth
         tls:
           insecure_skip_verify: true
-      otlp/mdc2-prod:
-        endpoint: grpc.mdc2-otel-gateway.safaricomet.net:443
-        write_buffer_size: 10485760
-        timeout: 60s
-        auth:
-          authenticator: bearertokenauth
-        tls:
-          insecure_skip_verify: true
+      debug:
+        verbosity: basic
     processors:
       filter/k8sobjects:
         error_mode: ignore
@@ -474,9 +430,7 @@ clusterReceiver:
       pipelines:
         logs:
           exporters:
-          - splunk_hec/platform_logs
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - batch
@@ -487,8 +441,7 @@ clusterReceiver:
           - k8s_events
         logs/k8sobjects:
           exporters:
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - filter/k8sobjects
@@ -500,9 +453,7 @@ clusterReceiver:
           - k8sobjects
         metrics:
           exporters:
-          - splunk_hec/platform_metrics
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - batch
@@ -512,9 +463,7 @@ clusterReceiver:
           - k8s_cluster
         metrics/collector:
           exporters:
-          - splunk_hec/platform_metrics
-          - otlp/mdc1-prod
-          - otlp/mdc2-prod
+          - otlp/mdc1
           processors:
           - memory_limiter
           - batch
@@ -527,25 +476,12 @@ clusterReceiver:
   enabled: true
   eventsEnabled: true
   extraVolumes:
-  - configMap:
-      items:
-      - key: ca-certificates.crt
-        path: ca-certificates.crt
-      name: safaricomet.net
-    name: etc-ssl-certs
-  - name: bearertokens
-    secret:
-      secretName: bearertokens
   - name: extra-config
     configMap:
       name: splunk-otel-collector-cluster-receiver-extra-config
   extraVolumeMounts:
   - name: extra-config
     mountPath: /extra
-  - name: etc-ssl-certs
-    mountPath: /etc/ssl/certs
-  - name: bearertokens
-    mountPath: /secrets/bearertokens
   resources:
     requests:
       cpu: 250m
@@ -579,17 +515,17 @@ logsCollection:
     enabled: true
     directory: /var/log/journal
 splunkPlatform:
-  endpoint: https://splunk_collector1.safaricomet.net:8088/services/collector/event
+  endpoint: ""
   index: mdc_${tenant}_logs
   insecureSkipVerify: true
-  metricsEnabled: true
+  metricsEnabled: false  # HEC disabled for test
   metricsIndex: mdc_${tenant}_metrics
   tracesEnabled: false
   tracesIndex: mdc_${tenant}_logs
   sendingQueue:
     persistentQueue:
       enabled: false
-  token: ${splunk_hec_token}
+  token: "dummy"  # HEC not used in test — splunkPlatform pipelines removed
 targetAllocator:
   enabled: true
   config:

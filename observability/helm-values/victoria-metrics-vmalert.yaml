@@ -25,7 +25,7 @@ server:
     httpListenAddr: :8880
     rule:
     - /config/alert-rules.yaml
-    external.url: https://${datacenter}-observe.safaricomet.net
+    external.url: http://${grafana_ip}
     external.alert.source: 'explore?left={"datasource":"victoria-metrics","queries":[{"expr":{{ .Expr|jsonEscape|queryEscape }},"refId":"A"}],"range":{"from":"now-1h","to":"now"}}'
 
   resources:

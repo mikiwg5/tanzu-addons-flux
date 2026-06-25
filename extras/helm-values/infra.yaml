@@ -14,7 +14,7 @@ config:
   accessKeySecret: infra-agent-access-key
   name: ${datacenter}-${tenant}-tkc
   server:
-    url: login-k8s.safaricomet.net
+    url: ${infra_server_url}   # set via --infra-server-ip in deploy.sh
 env:
 - name: INFRA_LOG_LEVEL
   value: debug
