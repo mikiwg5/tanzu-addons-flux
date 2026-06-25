@@ -45,7 +45,7 @@ spec:
     spec:
       containers:
       - name: avi-api-proxy
-        image: ${registry_host}.safaricomet.net/platform/avi-api-proxy:latest
+        image: ${registry_host}.safaricomet\.net/oss/avi-api-proxy:latest
         resources:
           requests:
             cpu: 100m

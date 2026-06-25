@@ -58,8 +58,8 @@ spec:
     - kustomize:
         images:
           - name: quay.io/prometheus-operator/prometheus-config-reloader:v0.86.1
-            newName: ${registry_host}.safaricomet.net/platform/alertmanager-images
+            newName: ${registry_host}.safaricomet\.net/oss/alertmanager-images
             digest: sha256:d163d8eeab29cdc2e60e60510b19c328d49f090dc7adc27cb89289748c3b6a1e
           - name: quay.io/prometheus/alertmanager:v0.28.1
-            newName: ${registry_host}.safaricomet.net/platform/alertmanager-images
+            newName: ${registry_host}.safaricomet\.net/oss/alertmanager-images
             digest: sha256:220da6995a919b9ee6e0d3da7ca5f09802f3088007af56be22160314d2485b54

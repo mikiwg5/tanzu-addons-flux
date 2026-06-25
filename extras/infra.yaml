@@ -35,5 +35,5 @@ spec:
   - kustomize:
       images:
       - name: infrahq/infra:0.21.0
-        newName: ${registry_host}.safaricomet.net/platform/infra-images
+        newName: ${registry_host}.safaricomet\.net/oss/infra-images
         digest: sha256:5bc28fad1d3ae844adf72b1d5e02c0883116afb77fef90c497eb83c21059b74c

@@ -1,5 +1,5 @@
 hamle:
   image:
-    repository: ${registry_host}.safaricomet.net/platform/hamle-image
+    repository: ${registry_host}.safaricomet\.net/oss/hamle-image
     tag: 0.4.0
 powerscaleInfoSecret: hamle-sec

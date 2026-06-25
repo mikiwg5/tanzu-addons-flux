@@ -32,5 +32,5 @@ spec:
   - kustomize:
       images:
       - name: victoriametrics/vmalert:v1.126.0
-        newName: ${registry_host}.safaricomet.net/platform/victoria-metrics-alert-images
+        newName: ${registry_host}.safaricomet\.net/oss/victoria-metrics-alert-images
         digest: sha256:addc28679f146199c048f571aededcdde362394a862b6ab8b19d65f02e6ed3bb

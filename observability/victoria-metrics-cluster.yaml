@@ -37,11 +37,11 @@ spec:
   - kustomize:
       images:
       - name: victoriametrics/vminsert:v1.126.0-cluster
-        newName: ${registry_host}.safaricomet.net/platform/victoria-metrics-cluster-images
+        newName: ${registry_host}.safaricomet\.net/oss/victoria-metrics-cluster-images
         digest: sha256:70839fbd67fab6cc00f647a6370d7f0587aabb24cc18da8b90b5b24b6e647622
       - name: victoriametrics/vmselect:v1.126.0-cluster
-        newName: ${registry_host}.safaricomet.net/platform/victoria-metrics-cluster-images
+        newName: ${registry_host}.safaricomet\.net/oss/victoria-metrics-cluster-images
         digest: sha256:3b89721d28fad348beff693e94afdb425230fed22f1c56ae6229211b7258b442
       - name: victoriametrics/vmstorage:v1.126.0-cluster
-        newName: ${registry_host}.safaricomet.net/platform/victoria-metrics-cluster-images
+        newName: ${registry_host}.safaricomet\.net/oss/victoria-metrics-cluster-images
         digest: sha256:6d5735396c0cff693a3c1de6190a86c2bb19b1aff0f16f1c7396904e5974d425

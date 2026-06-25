@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
       - name: pmax-exporter
-        image: ${registry_host}.safaricomet.net/platform/pmaxperfpy:latest
+        image: ${registry_host}.safaricomet\.net/oss/pmaxperfpy:latest
         args:
         - --config-file=/etc/pmaxperfpy/pmax_config.json
         resources:

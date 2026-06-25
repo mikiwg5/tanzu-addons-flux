@@ -35,26 +35,26 @@ spec:
   - kustomize:
       images:
       - name: bitnami/kubectl:1.30.2
-        newName: ${registry_host}.safaricomet.net/platform/kyverno-images
+        newName: ${registry_host}.safaricomet\.net/oss/kyverno-images
         digest: sha256:701bc72dea299c41b26593d99bcb98f41ff606fccbcaf184b180ca0eb277e94b
       - name: busybox:1.35
-        newName: ${registry_host}.safaricomet.net/platform/kyverno-images
+        newName: ${registry_host}.safaricomet\.net/oss/kyverno-images
         digest: sha256:584c3aa5ea2787155c186d156a85c380db220a8c886c01aac511b99880290010
       - name: ghcr.io/kyverno/background-controller:v1.13.1
-        newName: ${registry_host}.safaricomet.net/platform/kyverno-images
+        newName: ${registry_host}.safaricomet\.net/oss/kyverno-images
         digest: sha256:17fbe06fa531c25233db385db7d8efa7a548d35710040c481437352fd3220a0f
       - name: ghcr.io/kyverno/cleanup-controller:v1.13.1
-        newName: ${registry_host}.safaricomet.net/platform/kyverno-images
+        newName: ${registry_host}.safaricomet\.net/oss/kyverno-images
         digest: sha256:a226250087202062d7c0644bb3f9331068b2a3db414f9153e95c0312cde06bb1
       - name: ghcr.io/kyverno/kyverno-cli:v1.13.1
-        newName: ${registry_host}.safaricomet.net/platform/kyverno-images
+        newName: ${registry_host}.safaricomet\.net/oss/kyverno-images
         digest: sha256:3fc886f4fe29eabab6e83260584db3bd23a53486a334d73c9828599728998bf3
       - name: ghcr.io/kyverno/kyverno:v1.13.1
-        newName: ${registry_host}.safaricomet.net/platform/kyverno-images
+        newName: ${registry_host}.safaricomet\.net/oss/kyverno-images
         digest: sha256:e0f7b72c415089be1f08bfdaf12e433cbb24434ae100aa14e72bb7f4121299ce
       - name: ghcr.io/kyverno/kyvernopre:v1.13.1
-        newName: ${registry_host}.safaricomet.net/platform/kyverno-images
+        newName: ${registry_host}.safaricomet\.net/oss/kyverno-images
         digest: sha256:2270989dd9b79f88bb83750bf7fd006189284d3c90c93a0a40be4ab566d65a8a
       - name: ghcr.io/kyverno/reports-controller:v1.13.1
-        newName: ${registry_host}.safaricomet.net/platform/kyverno-images
+        newName: ${registry_host}.safaricomet\.net/oss/kyverno-images
         digest: sha256:55e97e8084e83bba2f9498cda53f989dc1dbbe8cf655af200f5e1bebd90df5bb

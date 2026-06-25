@@ -26,8 +26,8 @@ spec:
   - kustomize:
       images:
       - name: quay.io/jetstack/cert-manager-package-debian:20210119.0
-        newName: ${registry_host}.safaricomet.net/platform/trust-manager-images
+        newName: ${registry_host}.safaricomet\.net/oss/trust-manager-images
         digest: sha256:b38f8443f651f2a1ccd233dfe2bb16932b8b13107fd5ba0878179c11156495ec
       - name: quay.io/jetstack/trust-manager:v0.12.0
-        newName: ${registry_host}.safaricomet.net/platform/trust-manager-images
+        newName: ${registry_host}.safaricomet\.net/oss/trust-manager-images
         digest: sha256:36062665587556ecfab32ef430544bde9e251d15bacbe7dd23b1680026f69f8a

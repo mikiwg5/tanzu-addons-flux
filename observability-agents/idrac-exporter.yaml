@@ -30,5 +30,5 @@ spec:
   - kustomize:
       images:
       - name: mrlhansen/idrac_exporter:2.2.0
-        newName: ${registry_host}.safaricomet.net/platform/idrac-exporter-images
+        newName: ${registry_host}.safaricomet\.net/oss/idrac-exporter-images
         digest: sha256:26a295c470f41e997bdae64092887f90627eb06e97dbcf7bf620833083e6c9ee

@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
       - name: powerscale-exporter
-        image: ${registry_host}.safaricomet.net/platform/powerscale-exporter:0.28
+        image: ${registry_host}.safaricomet\.net/oss/powerscale-exporter:0.28
         args:
         - -config-file=/etc/powerscale-exporter/powerscale-exporter-config.toml
         resources:
