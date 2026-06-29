@@ -6,8 +6,8 @@ resources:
 - otel-idrac.yaml
 - otel-infra-urls.yaml
 - avi-api-proxy-prod.yaml
-- pmax-exporter.yaml
-- powerscale-exporter.yaml
+# - pmax-exporter.yaml
+# - powerscale-exporter.yaml
 # - netscaler-adc-metrics-exporter.yaml
 configMapGenerator:
 - files:

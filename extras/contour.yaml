@@ -37,8 +37,8 @@ spec:
   - kustomize:
       images:
       - name: ghcr.io/projectcontour/contour:v1.33.3
-        newName: ${registry_host}.safaricomet\.net/oss/contour-images
+        newName: ${registry_host}/platform/contour-images
         digest: sha256:beb9c82dc35187a794aafb7e0ccdd38b13114ae35d1dcba3c4f7601db1bb784c
       - name: docker.io/envoyproxy/envoy:v1.35.9
-        newName: ${registry_host}.safaricomet\.net/oss/contour-images
+        newName: ${registry_host}/platform/contour-images
         digest: sha256:cdd2b55ac98dc9ddfc026cb3988453424861773886aea7d24242702c90c44b1b

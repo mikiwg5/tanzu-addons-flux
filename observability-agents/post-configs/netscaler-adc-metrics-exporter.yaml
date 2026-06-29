@@ -214,7 +214,7 @@ spec:
                 prometheus:
                   host: '0.0.0.0'
                   port: 8889
-  image: ${registry_host}.safaricomet\.net/oss/opentelemetry-collector-contrib:0.138.0
+  image: ${registry_host}/platform/opentelemetry-collector-contrib:0.138.0
   env:
   - name: K8S_NODE_NAME
     valueFrom:

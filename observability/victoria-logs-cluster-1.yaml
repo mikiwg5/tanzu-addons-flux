@@ -37,5 +37,5 @@ spec:
   - kustomize:
       images:
       - name: victoriametrics/victoria-logs:v1.33.0
-        newName: ${registry_host}.safaricomet\.net/oss/victoria-logs-cluster-images
+        newName: ${registry_host}/platform/victoria-logs-cluster-images
         digest: sha256:d43f95621b946ab6aecdb42b85cbfc6760888617ed281dcbdc9780ce01d75d5e

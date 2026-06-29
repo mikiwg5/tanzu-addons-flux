@@ -1,0 +1,48 @@
+name: Publish Flux OCI Artifact
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+env:
+  REGISTRY: ${{ secrets.HARBOR_REGISTRY }}       # e.g., harbor.safaricomet.net
+  PROJECT: platform
+  ARTIFACT_NAME: k8s-addons-flux
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to Harbor OCI Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Setup Flux CLI
+        uses: fluxcd/action@v2
+        with:
+          version: 'latest'
+
+      - name: Publish Artifact
+        run: |
+          # Use github.sha as the image tag, and also tag 'latest'
+          TAG="${{ github.sha }}"
+          
+          echo "Pushing OCI artifact tag: $TAG"
+          flux push artifact oci://${{ env.REGISTRY }}/${{ env.PROJECT }}/${{ env.ARTIFACT_NAME }}:$TAG \
+            --path=. \
+            --source="${{ github.event.repository.html_url }}" \
+            --revision="${{ github.ref_name }}/${{ github.sha }}"
+
+          echo "Pushing OCI artifact tag: latest"
+          flux push artifact oci://${{ env.REGISTRY }}/${{ env.PROJECT }}/${{ env.ARTIFACT_NAME }}:latest \
+            --path=. \
+            --source="${{ github.event.repository.html_url }}" \
+            --revision="${{ github.ref_name }}/${{ github.sha }}"

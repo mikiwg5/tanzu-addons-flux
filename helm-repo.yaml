@@ -6,6 +6,6 @@ metadata:
 spec:
   interval: 30m0s
   type: oci
-  url: oci://${registry_host}.safaricomet.net/platform
-  certSecretRef:
-    name: safaricomet.net-tls
+  url: oci://${registry_host}/platform
+  # certSecretRef:
+  #   name: safaricomet.net-tls

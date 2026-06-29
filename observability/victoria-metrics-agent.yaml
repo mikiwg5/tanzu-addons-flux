@@ -19,7 +19,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: victoria-metrics-gateway
-        image: ${registry_host}.safaricomet\.net/oss/vmagent:v1.129.1
+        image: ${registry_host}/platform/vmagent:v1.129.1
         args:
         - -remoteWrite.tmpDataPath=/data/tmp
         - -httpListenAddr=:8429

@@ -42,12 +42,12 @@ cleanupController:
     enabled: true
 webhooksCleanup:
   image:
-    registry: ${registry_host}.safaricomet.net
+    registry: ${registry_host}
     repository: platform/kubectl
     tag: '1.30.2'
 policyReportsCleanup:
   image:
-    registry: ${registry_host}.safaricomet.net
+    registry: ${registry_host}
     repository: platform/kubectl
     tag: '1.30.2'
 reportsController:

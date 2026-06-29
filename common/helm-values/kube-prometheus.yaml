@@ -43,14 +43,14 @@ extraDeploy:
       component: antrea-agent
 operator:
   image:
-    registry: ${registry_host}.safaricomet.net
+    registry: ${registry_host}
     repository: platform/kube-prometheus-images
     digest: sha256:9b23077204b4c3240b9075875573bfbed1805261f3b6248d48d2a65160bc6e0b
   extraArgs:
   - -prometheus-config-reloader=$(PROMETHEUS_CONFIG_RELOADER)
 alertmanager:
   image:
-    registry: ${registry_host}.safaricomet.net
+    registry: ${registry_host}
     repository: platform/kube-prometheus-images
     digest: sha256:50bcca286519e8f96a3b57c7570762a08398c3ae5f57875dd15e0f3e118b9ed3
   persistence:
@@ -481,7 +481,7 @@ prometheus:
   scrapeInterval: 60s
   retention: 5d
   image:
-    registry: ${registry_host}.safaricomet.net
+    registry: ${registry_host}
     repository: platform/kube-prometheus-images
     digest: sha256:1c5d23f84cbc84b870e64bbfefb4bcf62a0a08fe94e1f78987261728f7efe7bb
   configReloader:

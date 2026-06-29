@@ -10,6 +10,26 @@ stringData:
   registry_host: ${registry_host}
   splunk_hec_token: ${splunk_hec_token}
   splunk_access_token: ${splunk_access_token}
+  webhook_token: ${webhook_token}
+  webhook_url: ${webhook_url}
+  otel_gateway_tokens: ${otel_gateway_tokens}
+  otel_collector_tokens: ${otel_collector_tokens}
+  vcenter_username: ${vcenter_username}
+  vcenter_password: ${vcenter_password}
+  avi_controller: ${avi_controller}
+  avi_username: ${avi_username}
+  avi_password: ${avi_password}
+  grafana_ip: ${grafana_ip}
+  idrac_username: ${idrac_username}
+  idrac_password: ${idrac_password}
+  infra_server_url: ${infra_server_url}
+  mdc1_gateway_ip: ${mdc1_gateway_ip}
+  pg_user: ${pg_user}
+  pg_password: ${pg_password}
+  pg_repmgrPassword: ${pg_repmgrPassword}
+  pgpool_adminPassword: ${pgpool_adminPassword}
+  tempo_s3_access_key: ${tempo_s3_access_key}
+  tempo_s3_secret_key: ${tempo_s3_secret_key}
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -52,50 +72,50 @@ spec:
     - kind: Secret
       name: substitute-config
       optional: false
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: common-extras-apps
-  namespace: flux-system
-spec:
-  interval: 1m
-  timeout: 60m
-  path: ./common-extras/
-  prune: false
-  wait: true
-  sourceRef:
-    kind: OCIRepository
-    name: k8s-addons-flux
-  dependsOn:
-  - name: common-apps-post-configs
-  postBuild:
-    substituteFrom:
-    - kind: Secret
-      name: substitute-config
-      optional: false
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: common-extras-apps-post-configs
-  namespace: flux-system
-spec:
-  interval: 1m
-  timeout: 60m
-  path: ./common-extras/post-configs/
-  prune: false
-  wait: true
-  sourceRef:
-    kind: OCIRepository
-    name: k8s-addons-flux
-  dependsOn:
-  - name: common-extras-apps
-  postBuild:
-    substituteFrom:
-    - kind: Secret
-      name: substitute-config
-      optional: false
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: common-extras-apps
+#   namespace: flux-system
+# spec:
+#   interval: 1m
+#   timeout: 60m
+#   path: ./common-extras/
+#   prune: false
+#   wait: true
+#   sourceRef:
+#     kind: OCIRepository
+#     name: k8s-addons-flux
+#   dependsOn:
+#   - name: common-apps-post-configs
+#   postBuild:
+#     substituteFrom:
+#     - kind: Secret
+#       name: substitute-config
+#       optional: false
+# ---
+# apiVersion: kustomize.toolkit.fluxcd.io/v1
+# kind: Kustomization
+# metadata:
+#   name: common-extras-apps-post-configs
+#   namespace: flux-system
+# spec:
+#   interval: 1m
+#   timeout: 60m
+#   path: ./common-extras/post-configs/
+#   prune: false
+#   wait: true
+#   sourceRef:
+#     kind: OCIRepository
+#     name: k8s-addons-flux
+#   dependsOn:
+#   - name: common-extras-apps
+#   postBuild:
+#     substituteFrom:
+#     - kind: Secret
+#       name: substitute-config
+#       optional: false
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -112,7 +132,7 @@ spec:
     kind: OCIRepository
     name: k8s-addons-flux
   dependsOn:
-  - name: common-extras-apps-post-configs
+  - name: common-apps-post-configs
   postBuild:
     substituteFrom:
     - kind: Secret
@@ -140,3 +160,70 @@ spec:
     - kind: Secret
       name: substitute-config
       optional: false
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: observability-apps
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 60m
+  path: ./observability/
+  prune: false
+  wait: true
+  sourceRef:
+    kind: OCIRepository
+    name: k8s-addons-flux
+  dependsOn:
+  - name: extras-apps-post-configs
+  postBuild:
+    substituteFrom:
+    - kind: Secret
+      name: substitute-config
+      optional: false
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: observability-agents-apps
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 60m
+  path: ./observability-agents/
+  prune: false
+  wait: true
+  sourceRef:
+    kind: OCIRepository
+    name: k8s-addons-flux
+  dependsOn:
+  - name: observability-apps
+  postBuild:
+    substituteFrom:
+    - kind: Secret
+      name: substitute-config
+      optional: false
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: observability-agents-post-configs
+  namespace: flux-system
+spec:
+  interval: 1m
+  timeout: 60m
+  path: ./observability-agents/post-configs/
+  prune: false
+  wait: true
+  sourceRef:
+    kind: OCIRepository
+    name: k8s-addons-flux
+  dependsOn:
+  - name: observability-agents-apps
+  postBuild:
+    substituteFrom:
+    - kind: Secret
+      name: substitute-config
+      optional: false
+

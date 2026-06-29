@@ -43,8 +43,8 @@ spec:
   - kustomize:
       images:
       - name: docker.io/bitnami/grafana-operator:5.18.0-debian-12-r5
-        newName: ${registry_host}.safaricomet\.net/oss/grafana-operator-images
+        newName: ${registry_host}/platform/grafana-operator-images
         digest: sha256:7cdb67766a8bd554bf27bb10033e4eaa28f4ec9eb6d3ec0264fcee90cfa38345
       - name: docker.io/bitnami/grafana:12.0.2-debian-12-r0
-        newName: ${registry_host}.safaricomet\.net/oss/grafana-operator-images
+        newName: ${registry_host}/platform/grafana-operator-images
         digest: sha256:34d291799bd34a4176546774ccb43bbf508dc44afc333cdb0699cc0808192311

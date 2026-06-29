@@ -40,7 +40,7 @@ spec:
   - kustomize:
       images:
       - name: djkormo/adcs-issuer:2.1.2
-        newName: ${registry_host}.safaricomet\.net/oss/adcs-issuer-images
+        newName: ${registry_host}/platform/adcs-issuer-images
         digest: sha256:9f34e87e7586a10fef8580f9ff96a3f5cc4cd58e6546eef11fc3df619c504c7c
       patches:
       - target:

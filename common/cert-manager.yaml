@@ -35,14 +35,14 @@ spec:
   - kustomize:
       images:
       - name: quay.io/jetstack/cert-manager-cainjector:v1.15.3
-        newName: ${registry_host}.safaricomet\.net/oss/cert-manager-images
+        newName: ${registry_host}/platform/cert-manager-images
         digest: sha256:6802c6afea2da91f5782880b79008179bb98147a23ce00f3cab5ba799807b5d6
       - name: quay.io/jetstack/cert-manager-controller:v1.15.3
-        newName: ${registry_host}.safaricomet\.net/oss/cert-manager-images
+        newName: ${registry_host}/platform/cert-manager-images
         digest: sha256:631ba2b3bf7be0bd0d446b8bfcbeb56f8fe735cd02a267567a8d94682d03165b
       - name: quay.io/jetstack/cert-manager-startupapicheck:v1.15.3
-        newName: ${registry_host}.safaricomet\.net/oss/cert-manager-images
+        newName: ${registry_host}/platform/cert-manager-images
         digest: sha256:a896ff5d8029e5a040643935089ef0466fe0c1f6b2fe591f342994c53aada6e2
       - name: quay.io/jetstack/cert-manager-webhook:v1.15.3
-        newName: ${registry_host}.safaricomet\.net/oss/cert-manager-images
+        newName: ${registry_host}/platform/cert-manager-images
         digest: sha256:373e3acd7b96c87a574f9234bb4fbfd576e3205c502d6da5dade41165c9dc828

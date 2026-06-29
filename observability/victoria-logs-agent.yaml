@@ -19,7 +19,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: victoria-logs-gateway
-        image: ${registry_host}.safaricomet\.net/oss/vlagent:v1.37.2
+        image: ${registry_host}/platform/vlagent:v1.37.2
         args:
         - -remoteWrite.tmpDataPath=/data/tmp
         - -httpListenAddr=:9429

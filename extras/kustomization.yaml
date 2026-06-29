@@ -5,7 +5,7 @@ resources:
 - splunk-otel-collector.yaml
 - infra.yaml
 - hamle.yaml
-- container-storage-modules.yaml
+# - container-storage-modules.yaml
 - contour.yaml
 configMapGenerator:
 - files:
@@ -44,15 +44,16 @@ configMapGenerator:
   namespace: infra
   options:
     disableNameSuffixHash: true
-- files:
-  - values.yaml=helm-values/container-storage-modules.yaml
-  name: isilon-values
-  namespace: isilon
-  options:
-    disableNameSuffixHash: true
+# - files:
+#   - values.yaml=helm-values/container-storage-modules.yaml
+#   name: isilon-values
+#   namespace: isilon
+#   options:
+#     disableNameSuffixHash: true
 - files:
   - values.yaml=helm-values/contour.yaml
   name: contour-values
   namespace: contour
   options:
     disableNameSuffixHash: true
+

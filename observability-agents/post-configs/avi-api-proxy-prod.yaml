@@ -1,30 +1,12 @@
-apiVersion: external-secrets.io/v1
-kind: ExternalSecret
+apiVersion: v1
+kind: Secret
 metadata:
   name: avi-api-proxy-prod-config
   namespace: otel-gateway
-spec:
-  refreshPolicy: OnChange
-  refreshInterval: 1h
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: external-secrets-cluster-secret-store
-  target:
-    name: avi-api-proxy-prod-config
-    creationPolicy: Owner
-  data:
-  - secretKey: controller
-    remoteRef:
-      key: k8s/${datacenter}-cloud/prod-avi
-      property: controller
-  - secretKey: username
-    remoteRef:
-      key: k8s/${datacenter}-cloud/prod-avi
-      property: username
-  - secretKey: password
-    remoteRef:
-      key: k8s/${datacenter}-cloud/prod-avi
-      property: password
+stringData:
+  controller: ${avi_controller}
+  username: ${avi_username}
+  password: ${avi_password}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -45,7 +27,7 @@ spec:
     spec:
       containers:
       - name: avi-api-proxy
-        image: ${registry_host}.safaricomet\.net/oss/avi-api-proxy:latest
+        image: ${registry_host}/platform/avi-api-proxy:latest
         resources:
           requests:
             cpu: 100m

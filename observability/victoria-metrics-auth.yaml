@@ -30,5 +30,5 @@ spec:
   - kustomize:
       images:
       - name: victoriametrics/vmauth:v1.126.0
-        newName: ${registry_host}.safaricomet\.net/oss/victoria-metrics-auth-images
+        newName: ${registry_host}/platform/victoria-metrics-auth-images
         digest: sha256:9e72a798bd00fe4b3ada83ffef10e0dfde73c2fd5249cd742b831a492718c79b
