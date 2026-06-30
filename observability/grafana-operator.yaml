@@ -1,4 +1,4 @@
-﻿apiVersion: v1
+apiVersion: v1
 kind: Namespace
 metadata:
   name: grafana-operator
@@ -44,7 +44,7 @@ spec:
       images:
       - name: docker.io/bitnami/grafana-operator:5.18.0-debian-12-r5
         newName: ${registry_host}/platform/grafana-operator-images
-        digest: sha256:sha256:df3474e92fbf9fd00ff159e41a5834cddb0f1639c74abe8f0d9a340edbcba022
+        digest: sha256:df3474e92fbf9fd00ff159e41a5834cddb0f1639c74abe8f0d9a340edbcba022
       - name: docker.io/bitnami/grafana:12.0.2-debian-12-r0
         newName: ${registry_host}/platform/grafana-operator-images
-        digest: sha256:sha256:49866ff5c122168fe9a24f6631945eac988ca29c48ae0bc3cb2804d6bdb7467f
+        digest: sha256:49866ff5c122168fe9a24f6631945eac988ca29c48ae0bc3cb2804d6bdb7467f

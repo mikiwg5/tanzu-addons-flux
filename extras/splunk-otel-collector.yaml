@@ -1,4 +1,4 @@
-﻿apiVersion: v1
+apiVersion: v1
 kind: Namespace
 metadata:
   name: splunk
@@ -176,16 +176,16 @@ spec:
       images:
       - name: busybox:latest
         newName: ${registry_host}/platform/splunk-otel-collector-images
-        digest: sha256:sha256:5004e39241f2f89009d6e08d17e7438a42eacc8c623fd785c44e529c8e1ea3c2
+        digest: sha256:5004e39241f2f89009d6e08d17e7438a42eacc8c623fd785c44e529c8e1ea3c2
       - name: ghcr.io/open-telemetry/opentelemetry-operator/opentelemetry-operator:0.134.0
         newName: ${registry_host}/platform/splunk-otel-collector-images
-        digest: sha256:sha256:f8efc961eae71626938170ffc852e35794a4ccbaffa832d802f75bf23a4ffd6e
+        digest: sha256:f8efc961eae71626938170ffc852e35794a4ccbaffa832d802f75bf23a4ffd6e
       - name: ghcr.io/open-telemetry/opentelemetry-operator/target-allocator:v0.132.0
         newName: ${registry_host}/platform/splunk-otel-collector-images
-        digest: sha256:sha256:cccf8fd3b622082b389315c1e3fb54c08323c59ce2da9153d2904f4f7efb0990
+        digest: sha256:cccf8fd3b622082b389315c1e3fb54c08323c59ce2da9153d2904f4f7efb0990
       - name: quay.io/brancz/kube-rbac-proxy:v0.19.1
         newName: ${registry_host}/platform/splunk-otel-collector-images
-        digest: sha256:sha256:e215791c9889f3ac41e35cf351b53477d8f7e7d22c3ec865c895671e0f9127d2
+        digest: sha256:e215791c9889f3ac41e35cf351b53477d8f7e7d22c3ec865c895671e0f9127d2
       - name: quay.io/signalfx/splunk-otel-collector:0.138.0
         newName: ${registry_host}/platform/splunk-otel-collector-images
-        digest: sha256:sha256:956c43d9b105d053b46c9a4b6a586b6fb33c4783f99aa63069cd294d562ce24e
+        digest: sha256:956c43d9b105d053b46c9a4b6a586b6fb33c4783f99aa63069cd294d562ce24e

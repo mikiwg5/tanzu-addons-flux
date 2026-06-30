@@ -1,4 +1,4 @@
-﻿global:
+global:
   security:
     allowInsecureImages: true
 extraDeploy:
@@ -45,14 +45,14 @@ operator:
   image:
     registry: ${registry_host}
     repository: platform/kube-prometheus-images
-    digest: sha256:sha256:3ee1f4708bbd756b9b4a2152550608079dc602b6df4ec997d4454d9fa79032d1
+    digest: sha256:3ee1f4708bbd756b9b4a2152550608079dc602b6df4ec997d4454d9fa79032d1
   extraArgs:
   - -prometheus-config-reloader=$(PROMETHEUS_CONFIG_RELOADER)
 alertmanager:
   image:
     registry: ${registry_host}
     repository: platform/kube-prometheus-images
-    digest: sha256:sha256:84eff0009d53e9b29d027f006c76a8a2e55fd400913cb8ad5bef597902cefadc
+    digest: sha256:84eff0009d53e9b29d027f006c76a8a2e55fd400913cb8ad5bef597902cefadc
   persistence:
     enabled: true
     size: 2Gi
@@ -483,12 +483,13 @@ prometheus:
   image:
     registry: ${registry_host}
     repository: platform/kube-prometheus-images
-    digest: sha256:sha256:93a0d622d8e183185394b2491cadf7cc874b64292da9004316af25a3f91080c5
+    digest: sha256:93a0d622d8e183185394b2491cadf7cc874b64292da9004316af25a3f91080c5
   configReloader:
     service:
       enabled: false
     serviceMonitor:
       enabled: true
+      jobLabel: prometheus-config-reloader
   enableAdminAPI: true
   externalLabels:
     cluster: ${tenant}-tkc

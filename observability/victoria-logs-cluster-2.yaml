@@ -1,4 +1,4 @@
-﻿apiVersion: helm.toolkit.fluxcd.io/v2
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: vlc2
@@ -31,4 +31,4 @@ spec:
       images:
       - name: victoriametrics/victoria-logs:v1.33.0
         newName: ${registry_host}/platform/victoria-logs-cluster-images
-        digest: sha256:sha256:2dac59f4a3ca4a2ecd0db90d87bf994562ec2a04bfec9771bb8760673e8c88ea
+        digest: sha256:2dac59f4a3ca4a2ecd0db90d87bf994562ec2a04bfec9771bb8760673e8c88ea

@@ -1,4 +1,4 @@
-﻿apiVersion: v1
+apiVersion: v1
 kind: Namespace
 metadata:
   name: kyverno
@@ -36,25 +36,25 @@ spec:
       images:
       - name: bitnami/kubectl:1.30.2
         newName: ${registry_host}/platform/kyverno-images
-        digest: sha256:sha256:10ceb653b3405f9814d37604d0abb4d265e8bcc537409ad8df8bfd21d8718061
+        digest: sha256:10ceb653b3405f9814d37604d0abb4d265e8bcc537409ad8df8bfd21d8718061
       - name: busybox:1.35
         newName: ${registry_host}/platform/kyverno-images
-        digest: sha256:sha256:e96f840e896af1987507a5d2d3c2aa3e706f3036ee6cdf104c0e4bc74632407c
+        digest: sha256:e96f840e896af1987507a5d2d3c2aa3e706f3036ee6cdf104c0e4bc74632407c
       - name: ghcr.io/kyverno/background-controller:v1.13.1
         newName: ${registry_host}/platform/kyverno-images
-        digest: sha256:sha256:6981de6bbd8bdf80900271557ca77b5dd57a6ba6747e41d22de3476a661209b2
+        digest: sha256:6981de6bbd8bdf80900271557ca77b5dd57a6ba6747e41d22de3476a661209b2
       - name: ghcr.io/kyverno/cleanup-controller:v1.13.1
         newName: ${registry_host}/platform/kyverno-images
-        digest: sha256:sha256:bcf9215b0a26f56de7fe0c199b490660af6c1cfc4467167a74a1c66ef9cda915
+        digest: sha256:bcf9215b0a26f56de7fe0c199b490660af6c1cfc4467167a74a1c66ef9cda915
       - name: ghcr.io/kyverno/kyverno-cli:v1.13.1
         newName: ${registry_host}/platform/kyverno-images
-        digest: sha256:sha256:d34c2e2e0042b7a6400cb01a756350c7ac73c42e4366959cc33e9da0e824f3aa
+        digest: sha256:d34c2e2e0042b7a6400cb01a756350c7ac73c42e4366959cc33e9da0e824f3aa
       - name: ghcr.io/kyverno/kyverno:v1.13.1
         newName: ${registry_host}/platform/kyverno-images
-        digest: sha256:sha256:64520b1847d25fd4e2b61da911a3720e3fa3cada04b88fce12d350a437b3f908
+        digest: sha256:64520b1847d25fd4e2b61da911a3720e3fa3cada04b88fce12d350a437b3f908
       - name: ghcr.io/kyverno/kyvernopre:v1.13.1
         newName: ${registry_host}/platform/kyverno-images
-        digest: sha256:sha256:80cc14727922a0a81982306fbca0aa495bc07f43e423e1679ff9a62f93671c96
+        digest: sha256:80cc14727922a0a81982306fbca0aa495bc07f43e423e1679ff9a62f93671c96
       - name: ghcr.io/kyverno/reports-controller:v1.13.1
         newName: ${registry_host}/platform/kyverno-images
-        digest: sha256:sha256:cf6c7504b294ae2cfab0f701d98c779372b71d90fb944022764ef04575608df2
+        digest: sha256:cf6c7504b294ae2cfab0f701d98c779372b71d90fb944022764ef04575608df2

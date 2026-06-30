@@ -1,4 +1,4 @@
-﻿apiVersion: v1
+apiVersion: v1
 kind: Namespace
 metadata:
   name: alertmanager
@@ -45,7 +45,7 @@ spec:
         images:
           - name: quay.io/prometheus-operator/prometheus-config-reloader:v0.86.1
             newName: ${registry_host}/platform/alertmanager-images
-            digest: sha256:sha256:23cf848a56ae37bd1ed4ea9c0eb787d50b0bfd5f71c30e2d5f380f424d5dfadb
+            digest: sha256:23cf848a56ae37bd1ed4ea9c0eb787d50b0bfd5f71c30e2d5f380f424d5dfadb
           - name: quay.io/prometheus/alertmanager:v0.28.1
             newName: ${registry_host}/platform/alertmanager-images
-            digest: sha256:sha256:f151ee742370e67875ab275e2d5289ad205cc7a544e2306311f5a3c3fb579465
+            digest: sha256:f151ee742370e67875ab275e2d5289ad205cc7a544e2306311f5a3c3fb579465

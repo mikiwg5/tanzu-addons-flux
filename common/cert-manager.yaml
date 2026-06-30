@@ -1,4 +1,4 @@
-﻿apiVersion: v1
+apiVersion: v1
 kind: Namespace
 metadata:
   name: cert-manager
@@ -36,13 +36,13 @@ spec:
       images:
       - name: quay.io/jetstack/cert-manager-cainjector:v1.15.3
         newName: ${registry_host}/platform/cert-manager-images
-        digest: sha256:sha256:4897b5a32a8e428a1c317f959bec8a48e050aa86a6ab5989c7e4cc79d25ad284
+        digest: sha256:4897b5a32a8e428a1c317f959bec8a48e050aa86a6ab5989c7e4cc79d25ad284
       - name: quay.io/jetstack/cert-manager-controller:v1.15.3
         newName: ${registry_host}/platform/cert-manager-images
-        digest: sha256:sha256:c1c741b374857b269530ca718ad99661249e3e1b4939f8c9bf249c13476025de
+        digest: sha256:c1c741b374857b269530ca718ad99661249e3e1b4939f8c9bf249c13476025de
       - name: quay.io/jetstack/cert-manager-startupapicheck:v1.15.3
         newName: ${registry_host}/platform/cert-manager-images
-        digest: sha256:sha256:beaa224d0c5d3d5aac2dcf70ab7948f225e3efeb2b94dd01997c7fbf24dcebf3
+        digest: sha256:beaa224d0c5d3d5aac2dcf70ab7948f225e3efeb2b94dd01997c7fbf24dcebf3
       - name: quay.io/jetstack/cert-manager-webhook:v1.15.3
         newName: ${registry_host}/platform/cert-manager-images
-        digest: sha256:sha256:5688c7c34e4238ed25b05645502241dfa38776f4b74afb7b143c5575afba3ed8
+        digest: sha256:5688c7c34e4238ed25b05645502241dfa38776f4b74afb7b143c5575afba3ed8
