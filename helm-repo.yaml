@@ -6,6 +6,7 @@ metadata:
 spec:
   interval: 30m0s
   type: oci
-  url: oci://${registry_host}/platform
+  url: oci://harbor-harbor-core.harbor.svc.cluster.local/platform
+  insecure: true
   # certSecretRef:
   #   name: safaricomet.net-tls

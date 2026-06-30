@@ -290,24 +290,10 @@ spec:
             app.kubernetes.io/component: opentelemetry-collector
             app.kubernetes.io/instance: otel-gateway.otel-gateway
         topologyKey: kubernetes.io/hostname
-  ingress:
-    type: ingress
-    ruleType: subdomain
-    annotations:
-      projectcontour.io/response-timeout: 90s
-      cert-manager.io/issuer: "adcsclusterissuer"
-      cert-manager.io/issuer-kind: "ClusterAdcsIssuer"
-      cert-manager.io/issuer-group: "adcs.certmanager.csf.nokia.com"
-      cert-manager.io/common-name: otlp-http.${datacenter}-otel-gateway.safaricomet.net
-    hostname: ${datacenter}-otel-gateway.safaricomet.net
-    ingressClassName: contour
-    tls:
-    - secretName: otel-gateway-tls
-      hosts:
-      - otlp-http.${datacenter}-otel-gateway.safaricomet.net
-      - otlp-grpc.${datacenter}-otel-gateway.safaricomet.net
-      - grpc.${datacenter}-otel-gateway.safaricomet.net
-      - otel-gateway.safaricomet.net
+  # ingress disabled for test cluster — no external domain resolution needed
+  # ingress:
+  #   type: ingress
+  #   hostname: ${datacenter}-otel-gateway.safaricomet.net
   volumes:
   - configMap:
       items:
@@ -338,21 +324,22 @@ spec:
     mountPath: /etc/ssl/certs
   - name: bearertokens
     mountPath: /secrets/bearertokens
----
-apiVersion: projectcontour.io/v1
-kind: HTTPProxy
-metadata:
-  name: otel-gateway-collector
-  namespace: otel-gateway
-spec:
-  virtualhost:
-    fqdn: grpc.${datacenter}-otel-gateway.safaricomet.net
-    tls:
-      secretName: otel-gateway-tls
-  routes:
-  - conditions:
-    - prefix: /
-    services:
-    - name: otel-gateway-collector
-      port: 4317
-      protocol: h2c
+# HTTPProxy disabled for test cluster (no external domain / Contour not required)
+# ---
+# apiVersion: projectcontour.io/v1
+# kind: HTTPProxy
+# metadata:
+#   name: otel-gateway-collector
+#   namespace: otel-gateway
+# spec:
+#   virtualhost:
+#     fqdn: grpc.${datacenter}-otel-gateway.safaricomet.net
+#     tls:
+#       secretName: otel-gateway-tls
+#   routes:
+#   - conditions:
+#     - prefix: /
+#     services:
+#     - name: otel-gateway-collector
+#       port: 4317
+#       protocol: h2c
