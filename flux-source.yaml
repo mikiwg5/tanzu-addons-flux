@@ -1,15 +1,14 @@
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: OCIRepository
 metadata:
   name: k8s-addons-flux
   namespace: flux-system
 spec:
   interval: 1m
-  # Replace <registry-ip-or-host> with your actual Harbor registry (e.g. 10.0.0.50:30443)
-  url: oci://<registry-ip-or-host>/platform/k8s-addons-flux
+  url: oci://harbor-harbor-core.harbor.svc.cluster.local:80/platform/tanzu-addons-flux
+  insecure: true
   ref:
     tag: latest
-  # If Harbor requires credentials to pull the artifact:
   secretRef:
     name: harbor-registry-credentials
 ---
