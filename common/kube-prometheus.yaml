@@ -1,4 +1,4 @@
-apiVersion: v1
+﻿apiVersion: v1
 kind: Namespace
 metadata:
   name: kube-prometheus
@@ -35,22 +35,22 @@ spec:
       images:
       - name: docker.io/bitnami/alertmanager:0.28.1-debian-12-r9
         newName: ${registry_host}/platform/kube-prometheus-images
-        digest: sha256:50bcca286519e8f96a3b57c7570762a08398c3ae5f57875dd15e0f3e118b9ed3
+        digest: sha256:sha256:84eff0009d53e9b29d027f006c76a8a2e55fd400913cb8ad5bef597902cefadc
       - name: docker.io/bitnami/blackbox-exporter:0.26.0-debian-12-r10
         newName: ${registry_host}/platform/kube-prometheus-images
-        digest: sha256:33096ddabe7043b574aac673839d4d6116f67d5b9a9eacb18a9a4f813b32ab08
+        digest: sha256:sha256:bb10d12fe1a124e196602870419f1a22233606c47f28d7e5bf850a630f7308a9
       - name: docker.io/bitnami/kube-state-metrics:2.15.0-debian-12-r11
         newName: ${registry_host}/platform/kube-prometheus-images
-        digest: sha256:d085c8ee753adfb3f4c6817e352899fe26dab6464bda13cc345bea60372d96a6
+        digest: sha256:sha256:80529c1b9838b3cdc465c5de4b9400737847e42cc7d20cd78111cc2a75c3b76f
       - name: docker.io/bitnami/node-exporter:1.9.1-debian-12-r4
         newName: ${registry_host}/platform/kube-prometheus-images
-        digest: sha256:653097383091e922aea65277d4a3525d76e22c0124719902d7ee0e6f95c2f953
+        digest: sha256:sha256:2f405cc9df8e758dcafe3956d734c3adac2be79564f5d731b6773bf0d1176954
       - name: docker.io/bitnami/prometheus-operator:0.83.0-debian-12-r2
         newName: ${registry_host}/platform/kube-prometheus-images
-        digest: sha256:9b23077204b4c3240b9075875573bfbed1805261f3b6248d48d2a65160bc6e0b
+        digest: sha256:sha256:3ee1f4708bbd756b9b4a2152550608079dc602b6df4ec997d4454d9fa79032d1
       - name: docker.io/bitnami/prometheus:3.4.1-debian-12-r1
         newName: ${registry_host}/platform/kube-prometheus-images
-        digest: sha256:1c5d23f84cbc84b870e64bbfefb4bcf62a0a08fe94e1f78987261728f7efe7bb
+        digest: sha256:sha256:93a0d622d8e183185394b2491cadf7cc874b64292da9004316af25a3f91080c5
       - name: ubuntu:23.04
         newName: ${registry_host}/platform/kube-prometheus-images
-        digest: sha256:ea1285dffce8a938ef356908d1be741da594310c8dced79b870d66808cb12b0f
+        digest: sha256:sha256:7162767f3c86c5be37020f5305e783f03b8160c5081af286fe0214f9c0e1d463

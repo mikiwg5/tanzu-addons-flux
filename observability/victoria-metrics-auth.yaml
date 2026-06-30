@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
+﻿apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: vma
@@ -31,4 +31,4 @@ spec:
       images:
       - name: victoriametrics/vmauth:v1.126.0
         newName: ${registry_host}/platform/victoria-metrics-auth-images
-        digest: sha256:9e72a798bd00fe4b3ada83ffef10e0dfde73c2fd5249cd742b831a492718c79b
+        digest: sha256:sha256:9fcf83d31072e87af326d3dd1c6847cb5a28845392e661ea9c4e27648b9ea5e9

@@ -1,4 +1,4 @@
-apiVersion: v1
+﻿apiVersion: v1
 kind: Namespace
 metadata:
   name: victoria-metrics
@@ -38,10 +38,10 @@ spec:
       images:
       - name: victoriametrics/vminsert:v1.126.0-cluster
         newName: ${registry_host}/platform/victoria-metrics-cluster-images
-        digest: sha256:70839fbd67fab6cc00f647a6370d7f0587aabb24cc18da8b90b5b24b6e647622
+        digest: sha256:sha256:df9f52bc8391498bdb6b2e6ccd0735ddaeefe6c8cc352d5947068056c8f157c5
       - name: victoriametrics/vmselect:v1.126.0-cluster
         newName: ${registry_host}/platform/victoria-metrics-cluster-images
-        digest: sha256:3b89721d28fad348beff693e94afdb425230fed22f1c56ae6229211b7258b442
+        digest: sha256:sha256:cb6c16067a1714ffc2611ef31ea124f5fa79d556bb4b6eb80f04eb01042e8e6f
       - name: victoriametrics/vmstorage:v1.126.0-cluster
         newName: ${registry_host}/platform/victoria-metrics-cluster-images
-        digest: sha256:6d5735396c0cff693a3c1de6190a86c2bb19b1aff0f16f1c7396904e5974d425
+        digest: sha256:sha256:04b59bb5012c8fda15a15f2e736c8e8d7b5719ba2780d49f4be9dfd8c117d4cd

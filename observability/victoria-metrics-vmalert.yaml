@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
+﻿apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: vmalert
@@ -31,4 +31,4 @@ spec:
       images:
       - name: victoriametrics/vmalert:v1.126.0
         newName: ${registry_host}/platform/victoria-metrics-alert-images
-        digest: sha256:addc28679f146199c048f571aededcdde362394a862b6ab8b19d65f02e6ed3bb
+        digest: sha256:sha256:a7c40bbabb87df5c30915c91951fc743f1b8eeab3ad84fd11bb00e0e5a794898

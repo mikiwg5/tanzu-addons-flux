@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
+﻿apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: trust-manager
@@ -27,7 +27,7 @@ spec:
       images:
       - name: quay.io/jetstack/cert-manager-package-debian:20210119.0
         newName: ${registry_host}/platform/trust-manager-images
-        digest: sha256:b38f8443f651f2a1ccd233dfe2bb16932b8b13107fd5ba0878179c11156495ec
+        digest: sha256:sha256:e6569a92bc9033896bd1f24235aff14afeb3f178d58af84f8d7e5364d066c317
       - name: quay.io/jetstack/trust-manager:v0.12.0
         newName: ${registry_host}/platform/trust-manager-images
-        digest: sha256:36062665587556ecfab32ef430544bde9e251d15bacbe7dd23b1680026f69f8a
+        digest: sha256:sha256:668965da699915cd69727dc01c8b93bb3b2e41f3b693294985d6904bc00f0797

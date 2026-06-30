@@ -1,4 +1,4 @@
-apiVersion: v1
+﻿apiVersion: v1
 kind: Namespace
 metadata:
   name: victoria-logs
@@ -38,4 +38,4 @@ spec:
       images:
       - name: victoriametrics/victoria-logs:v1.33.0
         newName: ${registry_host}/platform/victoria-logs-cluster-images
-        digest: sha256:d43f95621b946ab6aecdb42b85cbfc6760888617ed281dcbdc9780ce01d75d5e
+        digest: sha256:sha256:2dac59f4a3ca4a2ecd0db90d87bf994562ec2a04bfec9771bb8760673e8c88ea

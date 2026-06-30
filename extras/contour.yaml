@@ -1,4 +1,4 @@
-apiVersion: v1
+﻿apiVersion: v1
 kind: Namespace
 metadata:
   name: contour
@@ -38,7 +38,7 @@ spec:
       images:
       - name: ghcr.io/projectcontour/contour:v1.33.3
         newName: ${registry_host}/platform/contour-images
-        digest: sha256:beb9c82dc35187a794aafb7e0ccdd38b13114ae35d1dcba3c4f7601db1bb784c
+        digest: sha256:sha256:ab3cc807429d452e1086ecda2e1a083f2dbb0027fca2a15d29a390b81dc7eb81
       - name: docker.io/envoyproxy/envoy:v1.35.9
         newName: ${registry_host}/platform/contour-images
-        digest: sha256:cdd2b55ac98dc9ddfc026cb3988453424861773886aea7d24242702c90c44b1b
+        digest: sha256:sha256:37c31497c8ed4891e97b5489ba669c1c11c24c9e90ee29a03c0598f9cec7782e

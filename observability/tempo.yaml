@@ -1,4 +1,4 @@
-apiVersion: v1
+﻿apiVersion: v1
 kind: Namespace
 metadata:
   name: tempo
@@ -40,13 +40,13 @@ spec:
       images:
       - name: docker.io/grafana/tempo-query:2.9.0
         newName: ${registry_host}/platform/tempo-distributed-images
-        digest: sha256:6d1f21c5d2ca33a96524a408a5d5b4162a3a319ba5170a46ee0c5ecf5802ab27
+        digest: sha256:sha256:c2aa24ce4bba9931fd1769d7d6e4d69f33d884edd665ffa2d2362e9ef0a29a48
       - name: docker.io/grafana/tempo:2.9.0
         newName: ${registry_host}/platform/tempo-distributed-images
-        digest: sha256:b025a4a4db0a58cc94e2abfab59751f92d74ab8cc024d2e6025ba7efb87bbaff
+        digest: sha256:sha256:2e6a3db54ebf5508a84f7b49b0b776dfe344c8331e189782217c157637d09b7f
       - name: docker.io/memcached:1.6.39-alpine
         newName: ${registry_host}/platform/tempo-distributed-images
-        digest: sha256:aac456c35cd29635b5501fefac58a2e954752006c9d159fbf520dd785e09cbba
+        digest: sha256:sha256:1b84dd8acc59599aee0f842b57061e5be7ec5450bee8ccbedeeba0d2046c76f4
       - name: docker.io/prom/memcached-exporter:v0.15.3
         newName: ${registry_host}/platform/tempo-distributed-images
-        digest: sha256:2d3785a0ddb28c083298261c2a989ea108435078234e005fc6e3ec8f313f5a3b
+        digest: sha256:sha256:6df4f9ad113a5382f81b365d07e91702cc9d808aed4f94df7d90a38997222e13
